@@ -1,44 +1,25 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package com.bstek.urule.runtime.rete;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.bstek.urule.RuleException;
+import com.bstek.urule.PropertyConfigurer;
 import com.bstek.urule.Utils;
 import com.bstek.urule.action.ActionValue;
 import com.bstek.urule.action.ExecuteMethodAction;
 import com.bstek.urule.model.GeneralEntity;
 import com.bstek.urule.model.function.Argument;
 import com.bstek.urule.model.function.FunctionDescriptor;
-import com.bstek.urule.model.library.variable.VariableCategory;
 import com.bstek.urule.model.rule.AbstractValue;
 import com.bstek.urule.model.rule.ArithmeticType;
 import com.bstek.urule.model.rule.CommonFunctionValue;
 import com.bstek.urule.model.rule.ComplexArithmetic;
 import com.bstek.urule.model.rule.ConstantValue;
 import com.bstek.urule.model.rule.MethodValue;
-import com.bstek.urule.model.rule.NamedReferenceValue;
 import com.bstek.urule.model.rule.ParameterValue;
 import com.bstek.urule.model.rule.ParenValue;
-import com.bstek.urule.model.rule.SimpleArithmetic;
-import com.bstek.urule.model.rule.SimpleArithmeticValue;
 import com.bstek.urule.model.rule.SimpleValue;
 import com.bstek.urule.model.rule.Value;
 import com.bstek.urule.model.rule.ValueType;
@@ -46,222 +27,227 @@ import com.bstek.urule.model.rule.VariableCategoryValue;
 import com.bstek.urule.model.rule.VariableValue;
 import com.bstek.urule.model.rule.lhs.CommonFunctionParameter;
 
-/**
- * @author Jacky.gao
- * 2014年12月29日
- */
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 public class ValueCompute {
     public static final String BEAN_ID = "urule.valueCompute";
+    private static final String EXPR_PRE = "${";
+    private static final String EXPR_SUFF = "}";
 
-    public Object complexValueCompute(Value value, Object matchedObject, Context context, List<Object> allMatchedObjects, Map<String, Object> variableMap) {
-        return compute(value, context, matchedObject, allMatchedObjects, variableMap);
+    public ValueCompute() {
     }
 
-    public Object simpleArithmeticCompute(Context context, Object leftObj, SimpleArithmetic simpleArithmetic) {
-        String expr = null;
-        if (!(leftObj instanceof Number)) {
-            expr = "\"" + leftObj + "\"";
-        } else {
-            expr = leftObj.toString();
-        }
-        while (simpleArithmetic != null) {
-            ArithmeticType type = simpleArithmetic.getType();
-            SimpleArithmeticValue nextValue = simpleArithmetic.getValue();
-            expr += type.toString() + "\"" + nextValue.getContent() + "\"";
-            simpleArithmetic = nextValue.getArithmetic();
-        }
-        return context.parseExpression(expr);
+    public Object complexValueCompute(Value value, Object matchedObject, Context context, List<Object> allMatchedObjects) {
+        return this.compute(value, context, matchedObject, allMatchedObjects);
     }
 
-    private Object compute(Value value, Context context, Object matchedFact, List<Object> allMatchedObjects, Map<String, Object> variableMap) {
-        Object leftObj = fetchValue(value, context, matchedFact, allMatchedObjects, variableMap);
-        ComplexArithmetic arithmetic = value.getArithmetic();
-        if (arithmetic == null) {
-            return leftObj;
-        }
+    public Object complexArithmeticCompute(Object matchedFact, Context context, List<Object> allMatchedObjects, ComplexArithmetic arithmetic, Object leftValue) {
         StringBuffer expr = new StringBuffer();
-        addToExpr(expr, leftObj);
-        while (arithmetic != null) {
+        this.addToExpr(expr, leftValue);
+
+        AbstractValue rightValue;
+        for (; arithmetic != null; arithmetic = rightValue.getArithmetic()) {
             ArithmeticType type = arithmetic.getType();
-            addToExpr(expr, type);
-            AbstractValue rightValue = (AbstractValue) arithmetic.getValue();
+            this.addToExpr(expr, type);
+            rightValue = (AbstractValue) arithmetic.getValue();
             if (rightValue instanceof ParenValue) {
                 ParenValue pv = (ParenValue) rightValue;
-                Object obj = compute(pv.getValue(), context, matchedFact, allMatchedObjects, variableMap);
-                addToExpr(expr, obj);
+                Object obj = this.compute(pv.getValue(), context, matchedFact, allMatchedObjects);
+                this.addToExpr(expr, obj);
             } else {
-                Object rightObj = fetchValue(rightValue, context, matchedFact, allMatchedObjects, variableMap);
+                Object rightObj = this.fetchValue(rightValue, context, matchedFact, allMatchedObjects);
                 if (rightObj == null) {
                     rightObj = "null";
                 }
-                addToExpr(expr, rightObj);
+
+                this.addToExpr(expr, rightObj);
             }
-            arithmetic = rightValue.getArithmetic();
         }
+
         return context.parseExpression(expr.toString());
     }
 
+    private Object compute(Value value, Context context, Object matchedFact, List<Object> allMatchedObjects) {
+        Object leftObj = this.fetchValue(value, context, matchedFact, allMatchedObjects);
+        ComplexArithmetic arithmetic = value.getArithmetic();
+        if (arithmetic == null) {
+            return leftObj;
+        } else {
+            StringBuffer expr = new StringBuffer();
+            this.addToExpr(expr, leftObj);
+
+            AbstractValue rightValue;
+            for (; arithmetic != null; arithmetic = rightValue.getArithmetic()) {
+                ArithmeticType type = arithmetic.getType();
+                this.addToExpr(expr, type);
+                rightValue = (AbstractValue) arithmetic.getValue();
+                if (rightValue instanceof ParenValue) {
+                    ParenValue pv = (ParenValue) rightValue;
+                    Object obj = this.compute(pv.getValue(), context, matchedFact, allMatchedObjects);
+                    this.addToExpr(expr, obj);
+                } else {
+                    Object rightObj = this.fetchValue(rightValue, context, matchedFact, allMatchedObjects);
+                    if (rightObj == null) {
+                        rightObj = "null";
+                    }
+
+                    this.addToExpr(expr, rightObj);
+                }
+            }
+
+            return context.parseExpression(expr.toString());
+        }
+    }
+
     private void addToExpr(StringBuffer expr, Object obj) {
-        expr.append(" ");
         if (obj instanceof ArithmeticType) {
             expr.append(obj.toString());
         } else if (obj instanceof Number) {
             expr.append(obj.toString());
         } else {
-            expr.append("\"" + obj + "\"");
+            String data = obj.toString();
+            if (data.indexOf(32) > -1) {
+                expr.append("\"" + obj + "\"");
+            } else {
+                expr.append(data);
+            }
         }
-        expr.append(" ");
+
     }
 
-    private Object fetchValue(Value value, Context context, Object matchedFact, List<Object> allMatchedObjects, Map<String, Object> variableMap) {
+    private Object fetchValue(Value value, Context context, Object matchedFact, List<Object> allMatchedObjects) {
         Object left = null;
         ValueType type = value.getValueType();
         if (type.equals(ValueType.Input)) {
             left = ((SimpleValue) value).getContent();
         } else if (type.equals(ValueType.Constant)) {
             ConstantValue cv = (ConstantValue) value;
-            left = cv.getConstantName();
-        } else if (type.equals(ValueType.VariableCategory)) {
-            VariableCategoryValue vc = (VariableCategoryValue) value;
-            String categoryName = vc.getVariableCategory();
-            return findObject(context, matchedFact, categoryName, allMatchedObjects);
-        } else if (type.equals(ValueType.Parameter)) {
-            ParameterValue pv = (ParameterValue) value;
-            String categoryName = VariableCategory.PARAM_CATEGORY;
-            Object object = findObject(context, matchedFact, categoryName, allMatchedObjects);
-            if (object == null) {
-                return null;
-            }
-            String property = pv.getVariableName();
-            left = Utils.getObjectProperty(object, property);
-        } else if (type.equals(ValueType.Method)) {
-            MethodValue mv = (MethodValue) value;
-            ExecuteMethodAction action = new ExecuteMethodAction();
-            action.setBeanId(mv.getBeanId());
-            action.setBeanLabel(mv.getBeanLabel());
-            action.setMethodName(mv.getMethodName());
-            action.setMethodLabel(mv.getMethodLabel());
-            action.setParameters(mv.getParameters());
-            ActionValue actionValue = action.execute(context, matchedFact, allMatchedObjects, variableMap);
-            if (actionValue != null) {
-                left = actionValue.getValue();
-            } else {
-                left = null;
-            }
-        } else if (type.equals(ValueType.CommonFunction)) {
-            CommonFunctionValue v = (CommonFunctionValue) value;
-            CommonFunctionParameter functionParameter = v.getParameter();
-            Value propertyValue = functionParameter.getObjectParameter();
-            Object object = this.complexValueCompute(propertyValue, matchedFact, context, allMatchedObjects, variableMap);
-            FunctionDescriptor fun = Utils.findFunctionDescriptor(v.getName());
-            Argument arg = fun.getArgument();
-            String property = null;
-            if (arg.isNeedProperty()) {
-                property = functionParameter.getProperty();
-            }
-            left = fun.doFunction(object, property, context.getWorkingMemory());
-        } else if (type.equals(ValueType.Paren)) {
-            ParenValue parenValue = (ParenValue) value;
-            left = compute(parenValue.getValue(), context, matchedFact, allMatchedObjects, variableMap);
-        } else if (type.equals(ValueType.NamedReference)) {
-            NamedReferenceValue namedValue = (NamedReferenceValue) value;
-            String prop = namedValue.getPropertyName();
-            String refName = namedValue.getReferenceName();
-            if (variableMap == null) {
-                throw new RuleException("Reference [" + refName + "] not define");
-            }
-            Object obj = variableMap.get(refName);
-            if (obj == null) {
-                refName = refName.substring(1, refName.length());
-                obj = variableMap.get(refName);
-            }
-            if (obj == null) {
-                throw new RuleException("Reference [" + refName + "] not define");
-            }
-            if (prop != null) {
-                left = Utils.getObjectProperty(obj, prop);
-            } else {
-                left = obj;
-            }
+            left = this.getConstantValue(cv.getConstantName());
         } else {
-            VariableValue vv = (VariableValue) value;
-            String categoryName = vv.getVariableCategory();
-            Object object = findObject(context, matchedFact, categoryName, allMatchedObjects);
-            if (object == null) {
-                return null;
+            String categoryName;
+            if (type.equals(ValueType.VariableCategory)) {
+                VariableCategoryValue vc = (VariableCategoryValue) value;
+                categoryName = vc.getVariableCategory();
+                return this.findObject(context, matchedFact, categoryName, allMatchedObjects);
             }
-            String property = vv.getVariableName();
-            left = Utils.getObjectProperty(object, property);
+
+            Object object;
+            String property;
+            if (type.equals(ValueType.Parameter)) {
+                ParameterValue pv = (ParameterValue) value;
+                categoryName = "参数";
+                object = this.findObject(context, matchedFact, categoryName, allMatchedObjects);
+                if (object == null) {
+                    return null;
+                }
+
+                property = pv.getVariableName();
+                left = Utils.getObjectProperty(object, property);
+            } else if (type.equals(ValueType.Method)) {
+                MethodValue mv = (MethodValue) value;
+                ExecuteMethodAction action = new ExecuteMethodAction();
+                action.setBeanId(mv.getBeanId());
+                action.setBeanLabel(mv.getBeanLabel());
+                action.setMethodName(mv.getMethodName());
+                action.setMethodLabel(mv.getMethodLabel());
+                action.setParameters(mv.getParameters());
+                ActionValue actionValue = action.execute(context, matchedFact, allMatchedObjects);
+                if (actionValue != null) {
+                    left = actionValue.getValue();
+                } else {
+                    left = null;
+                }
+            } else if (type.equals(ValueType.CommonFunction)) {
+                CommonFunctionValue v = (CommonFunctionValue) value;
+                CommonFunctionParameter functionParameter = v.getParameter();
+                Value propertyValue = functionParameter.getObjectParameter();
+                object = this.complexValueCompute(propertyValue, matchedFact, context, allMatchedObjects);
+                FunctionDescriptor fun = Utils.findFunctionDescriptor(v.getName());
+                Argument arg = fun.getArgument();
+                property = null;
+                if (arg.isNeedProperty()) {
+                    property = functionParameter.getProperty();
+                }
+
+                left = fun.doFunction(object, property, context.getWorkingMemory());
+            } else if (type.equals(ValueType.Paren)) {
+                ParenValue parenValue = (ParenValue) value;
+                left = this.compute(parenValue.getValue(), context, matchedFact, allMatchedObjects);
+            } else {
+                VariableValue vv = (VariableValue) value;
+                categoryName = vv.getVariableCategory();
+                object = this.findObject(context, matchedFact, categoryName, allMatchedObjects);
+                if (object == null) {
+                    return null;
+                }
+
+                property = vv.getVariableName();
+                left = Utils.getObjectProperty(object, property);
+            }
         }
+
         return left;
     }
 
+    private String getConstantValue(String constant) {
+        if (constant.startsWith("${") && constant.endsWith("}")) {
+            String key = constant.substring(2, constant.length() - 1);
+            return PropertyConfigurer.getProperty(key);
+        } else {
+            return constant;
+        }
+    }
 
     private Object findObject(Context context, Object matchedFact, String categoryName, List<Object> allMatchedObjects) {
         String className = context.getVariableCategoryClass(categoryName);
-        Object object = findObject(className, matchedFact, context);
+        Object object = this.findObject(className, matchedFact, context);
         if (allMatchedObjects != null && object != null && !allMatchedObjects.contains(object)) {
             allMatchedObjects.add(object);
         }
+
         return object;
     }
 
-    @SuppressWarnings("rawtypes")
     public Object findObject(String className, Object matchedFact, Context context) {
         if (className.equals(HashMap.class.getName())) {
             return context.getWorkingMemory().getParameters();
-        }
-        if (matchedFact instanceof Collection) {
-            Collection coll = (Collection) matchedFact;
-            for (Object obj : coll) {
-                if (obj.getClass().getName().equals(className)) {
-                    return obj;
-                } else if (obj instanceof GeneralEntity) {
-                    GeneralEntity entity = (GeneralEntity) obj;
-                    if (entity.getTargetClass().equals(className)) {
+        } else {
+            if (matchedFact instanceof Collection) {
+                Collection coll = (Collection) matchedFact;
+                Iterator var5 = coll.iterator();
+
+                while (var5.hasNext()) {
+                    Object obj = var5.next();
+                    if (obj.getClass().getName().equals(className)) {
                         return obj;
                     }
+
+                    if (obj instanceof GeneralEntity) {
+                        GeneralEntity entity = (GeneralEntity) obj;
+                        if (entity.getTargetClass().equals(className)) {
+                            return obj;
+                        }
+                    }
                 }
-            }
-        } else {
-            if (matchedFact.getClass().getName().equals(className)) {
-                return matchedFact;
-            } else if (matchedFact instanceof GeneralEntity) {
-                GeneralEntity entity = (GeneralEntity) matchedFact;
-                if (entity.getTargetClass().equals(className)) {
+            } else {
+                if (matchedFact.getClass().getName().equals(className)) {
                     return matchedFact;
                 }
-            }
-        }
-        Object object = null;
-        List<Object> allFacts = context.getWorkingMemory().getAllFacts();
-        for (Object obj : allFacts) {
-            if (obj.getClass().getName().equals(className)) {
-                object = obj;
-                break;
-            } else if (obj instanceof GeneralEntity) {
-                GeneralEntity entity = (GeneralEntity) obj;
-                if (entity.getTargetClass().equals(className)) {
-                    object = obj;
-                    break;
-                }
-            }
-        }
-        if (object == null) {
-            allFacts = context.getWorkingMemory().getHistoryFacts();
-            for (Object obj : allFacts) {
-                if (obj.getClass().getName().equals(className)) {
-                    object = obj;
-                    break;
-                } else if (obj instanceof GeneralEntity) {
-                    GeneralEntity entity = (GeneralEntity) obj;
+
+                if (matchedFact instanceof GeneralEntity) {
+                    GeneralEntity entity = (GeneralEntity) matchedFact;
                     if (entity.getTargetClass().equals(className)) {
-                        object = obj;
-                        break;
+                        return matchedFact;
                     }
                 }
             }
+
+            Map<String, Object> allFactsMap = context.getWorkingMemory().getAllFactsMap();
+            return allFactsMap.get(className);
         }
-        return object;
     }
 }

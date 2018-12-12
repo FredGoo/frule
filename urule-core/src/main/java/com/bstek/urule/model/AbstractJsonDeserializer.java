@@ -28,7 +28,7 @@ import org.codehaus.jackson.map.JsonDeserializer;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.bstek.urule.Configure;
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.action.Action;
 import com.bstek.urule.action.ActionType;
 import com.bstek.urule.action.ConsolePrintAction;

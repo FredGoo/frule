@@ -18,7 +18,7 @@ package com.bstek.urule.console.repository.updater;
 import java.io.IOException;
 import java.util.List;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.console.repository.model.FileType;
 import com.bstek.urule.dsl.DSLRuleSetBuilder;
 import com.bstek.urule.model.rule.Library;

@@ -24,7 +24,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.bstek.urule.Configure;
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.model.library.Datatype;
 import com.bstek.urule.model.rete.jsondeserializer.CommonFunctionValueDeserializer;
 import com.bstek.urule.model.rete.jsondeserializer.ConstantValueDeserializer;

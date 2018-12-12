@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.bstek.urule.model.flow;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.model.flow.ins.FlowContext;
 import com.bstek.urule.model.flow.ins.FlowInstance;
 

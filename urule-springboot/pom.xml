@@ -10,12 +10,11 @@
         <relativePath/>
     </parent>
 
-    <name>Urule Springboot Project</name>
-    <groupId>geex-architecture</groupId>
-    <artifactId>urule-springboot</artifactId>
+    <name>FRule Springboot Project</name>
+    <groupId>gyqw</groupId>
+    <artifactId>frule-springboot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <description>Urule Springboot Project</description>
-    <url>https://github.com/youseries/urule/tree/master/urule-springboot</url>
+    <description>FRule Springboot Project</description>
 
     <properties>
         <java.version>1.7</java.version>
@@ -55,37 +54,39 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>geex-architecture</groupId>
-            <artifactId>urule-core</artifactId>
-            <version>2.1.7-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-jdk14</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>geex-architecture</groupId>
-            <artifactId>urule-console</artifactId>
-            <version>2.1.7-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-jdk14</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>geex-architecture</groupId>
-                    <artifactId>urule-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>gyqw</groupId>
+            <artifactId>frule-core</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jdk14</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>gyqw</groupId>
+            <artifactId>frule-console</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jdk14</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>gyqw</groupId>
+                    <artifactId>frule-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

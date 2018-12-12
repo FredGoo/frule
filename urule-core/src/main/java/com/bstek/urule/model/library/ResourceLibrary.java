@@ -18,7 +18,7 @@ package com.bstek.urule.model.library;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.model.library.action.ActionLibrary;
 import com.bstek.urule.model.library.constant.ConstantCategory;
 import com.bstek.urule.model.library.constant.ConstantLibrary;

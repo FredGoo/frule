@@ -17,6 +17,7 @@ package com.bstek.urule.runtime.rete;
 
 import java.util.List;
 
+import com.bstek.urule.model.rule.RuleInfo;
 import org.springframework.context.ApplicationContext;
 
 import com.bstek.urule.debug.MessageItem;
@@ -30,19 +31,27 @@ import com.bstek.urule.runtime.assertor.AssertorEvaluator;
  */
 public interface Context {
 
+    void addTipMsg(String var1);
+
+    String getTipMsg();
+
+    void cleanTipMsg();
+
     AssertorEvaluator getAssertorEvaluator();
 
     ValueCompute getValueCompute();
 
     ApplicationContext getApplicationContext();
 
-    String getVariableCategoryClass(String variableCategory);
+    String getVariableCategoryClass(String var1);
 
     WorkingMemory getWorkingMemory();
 
-    Object parseExpression(String expression);
+    Object parseExpression(String var1);
 
     List<MessageItem> getDebugMessageItems();
 
-    void debugMsg(String msg, MsgType type, boolean debug);
+    void debugMsg(String var1, MsgType var2, boolean var3);
+
+    RuleInfo getCurrentRule();
 }

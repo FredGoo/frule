@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.Utils;
 import com.bstek.urule.model.flow.FlowDefinition;
 import com.bstek.urule.model.rete.JsonUtils;

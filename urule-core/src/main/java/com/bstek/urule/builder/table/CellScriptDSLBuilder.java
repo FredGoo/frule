@@ -18,7 +18,7 @@ package com.bstek.urule.builder.table;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.dsl.CellScriptRuleParserBaseVisitor;
 import com.bstek.urule.dsl.RuleParserLexer;
 import com.bstek.urule.dsl.RuleParserParser;

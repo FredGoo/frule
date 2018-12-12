@@ -40,7 +40,7 @@ import com.bstek.urule.console.repository.NodeLockException;
  */
 public class URuleServlet extends HttpServlet {
     private static final long serialVersionUID = -5067484267904906233L;
-    private Map<String, ServletHandler> handlerMap = new HashMap<String, ServletHandler>();
+    private Map<String, ServletHandler> handlerMap = new HashMap<>();
     public static final String URL = "/urule";
 
     @Override

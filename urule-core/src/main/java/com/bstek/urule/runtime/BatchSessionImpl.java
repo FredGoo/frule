@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 
 /**
  * @author Jacky.gao

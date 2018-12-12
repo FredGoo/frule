@@ -18,13 +18,16 @@ package com.bstek.urule.model.rule;
 import java.util.Date;
 
 import com.bstek.urule.model.rule.lhs.Lhs;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * @author Jacky.gao
  * 2014年12月25日
  */
 public class Rule implements RuleInfo {
+    private String id;
     private String name;
+    private String file;
     private Integer salience;
     private Date effectiveDate;
     private Date expiresDate;
@@ -40,21 +43,43 @@ public class Rule implements RuleInfo {
     private Boolean loop;
     private Boolean loopRule = false;
     private String remark;
+    private boolean withElse;
+    @JsonIgnore
+    private Rule elseRule;
+
+    public Rule() {
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getFile() {
+        return this.file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
     public Date getEffectiveDate() {
-        return effectiveDate;
+        return this.effectiveDate;
     }
 
     public Integer getSalience() {
-        return salience;
+        return this.salience;
     }
 
     public void setSalience(Integer salience) {
@@ -62,7 +87,7 @@ public class Rule implements RuleInfo {
     }
 
     public Boolean getEnabled() {
-        return enabled;
+        return this.enabled;
     }
 
     public void setEnabled(Boolean enabled) {
@@ -70,7 +95,7 @@ public class Rule implements RuleInfo {
     }
 
     public Boolean getDebug() {
-        return debug;
+        return this.debug;
     }
 
     public void setDebug(Boolean debug) {
@@ -78,7 +103,7 @@ public class Rule implements RuleInfo {
     }
 
     public Boolean getAutoFocus() {
-        return autoFocus;
+        return this.autoFocus;
     }
 
     public void setAutoFocus(Boolean autoFocus) {
@@ -90,7 +115,7 @@ public class Rule implements RuleInfo {
     }
 
     public Date getExpiresDate() {
-        return expiresDate;
+        return this.expiresDate;
     }
 
     public void setExpiresDate(Date expiresDate) {
@@ -98,7 +123,7 @@ public class Rule implements RuleInfo {
     }
 
     public String getActivationGroup() {
-        return activationGroup;
+        return this.activationGroup;
     }
 
     public void setActivationGroup(String activationGroup) {
@@ -106,7 +131,7 @@ public class Rule implements RuleInfo {
     }
 
     public String getAgendaGroup() {
-        return agendaGroup;
+        return this.agendaGroup;
     }
 
     public void setAgendaGroup(String agendaGroup) {
@@ -114,7 +139,7 @@ public class Rule implements RuleInfo {
     }
 
     public String getRuleflowGroup() {
-        return ruleflowGroup;
+        return this.ruleflowGroup;
     }
 
     public void setRuleflowGroup(String ruleflowGroup) {
@@ -122,7 +147,7 @@ public class Rule implements RuleInfo {
     }
 
     public String getRemark() {
-        return remark;
+        return this.remark;
     }
 
     public void setRemark(String remark) {
@@ -130,7 +155,7 @@ public class Rule implements RuleInfo {
     }
 
     public Lhs getLhs() {
-        return lhs;
+        return this.lhs;
     }
 
     public void setLhs(Lhs lhs) {
@@ -138,7 +163,7 @@ public class Rule implements RuleInfo {
     }
 
     public Rhs getRhs() {
-        return rhs;
+        return this.rhs;
     }
 
     public void setRhs(Rhs rhs) {
@@ -146,7 +171,7 @@ public class Rule implements RuleInfo {
     }
 
     public Other getOther() {
-        return other;
+        return this.other;
     }
 
     public void setOther(Other other) {
@@ -154,7 +179,7 @@ public class Rule implements RuleInfo {
     }
 
     public Boolean getLoop() {
-        return loop;
+        return this.loop;
     }
 
     public void setLoop(Boolean loop) {
@@ -162,10 +187,26 @@ public class Rule implements RuleInfo {
     }
 
     public Boolean isLoopRule() {
-        return loopRule;
+        return this.loopRule;
     }
 
     public void setLoopRule(Boolean loopRule) {
         this.loopRule = loopRule;
+    }
+
+    public boolean isWithElse() {
+        return this.withElse;
+    }
+
+    public void setWithElse(boolean withElse) {
+        this.withElse = withElse;
+    }
+
+    public Rule getElseRule() {
+        return this.elseRule;
+    }
+
+    public void setElseRule(Rule elseRule) {
+        this.elseRule = elseRule;
     }
 }

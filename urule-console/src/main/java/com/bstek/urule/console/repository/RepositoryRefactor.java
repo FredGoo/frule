@@ -26,7 +26,7 @@ import javax.jcr.RepositoryException;
 
 import org.apache.tika.io.IOUtils;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.console.repository.model.FileType;
 
 /**

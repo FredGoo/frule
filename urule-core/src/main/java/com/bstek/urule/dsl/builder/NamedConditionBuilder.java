@@ -18,7 +18,7 @@ package com.bstek.urule.dsl.builder;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.dsl.DSLUtils;
 import com.bstek.urule.dsl.RuleParserParser.JoinContext;
 import com.bstek.urule.dsl.RuleParserParser.MultiNamedConditionsContext;

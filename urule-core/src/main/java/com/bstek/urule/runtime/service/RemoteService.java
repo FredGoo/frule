@@ -22,7 +22,7 @@ import com.bstek.urule.runtime.KnowledgePackage;
  * 2015年1月28日
  */
 public interface RemoteService {
-    public static final String BEAN_ID = "urule.remoteService";
+    String BEAN_ID = "urule.remoteService";
 
     KnowledgePackage getKnowledge(String packageId, String timestamp);
 }

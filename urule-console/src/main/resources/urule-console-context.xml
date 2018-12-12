@@ -38,6 +38,9 @@
     <bean id="urule.scorecardEditorServletHandler"
           class="com.bstek.urule.console.servlet.scorecard.ScorecardEditorServletHandler"/>
 
+    <bean id="urule.complexScorecardEditorServletHandler"
+          class="com.bstek.urule.console.servlet.complexscorecard.ComplexScorecardEditorServletHandler"/>
+
     <bean id="urule.resourceLoaderServletHandler" class="com.bstek.urule.console.servlet.ResourceLoaderServletHandler"/>
 
     <bean id="urule.loadKnowledgeServletHandler"

@@ -26,7 +26,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.dsl.DSLUtils;
 import com.bstek.urule.dsl.RuleParserParser.ActionParametersContext;
 import com.bstek.urule.dsl.RuleParserParser.BeanMethodContext;

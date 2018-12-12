@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.bstek.urule.dsl;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.dsl.RuleParserParser.OpContext;
 import com.bstek.urule.model.rule.Op;
 

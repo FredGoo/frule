@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Bstek
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -16,8 +16,10 @@
 package com.bstek.urule.parse.flow;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.bstek.urule.parse.LhsParser;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 
@@ -27,50 +29,85 @@ import com.bstek.urule.model.flow.DecisionType;
 
 /**
  * @author Jacky.gao
- * @since 2014年12月23日
+ * 2014年12月23日
  */
 public class DecisionNodeParser extends FlowNodeParser<DecisionNode> {
-	public DecisionNode parse(Element element) {
-		DecisionNode decision=new DecisionNode(element.attributeValue("name"));
-		decision.setEventBean(element.attributeValue("event-bean"));
-		String decitionType=element.attributeValue("decision-type");
-		if(StringUtils.isNotEmpty(decitionType)){
-			decision.setDecisionType(DecisionType.valueOf(decitionType));
-		}
-		decision.setX(element.attributeValue("x"));
-		decision.setY(element.attributeValue("y"));
-		decision.setWidth(element.attributeValue("width"));
-		decision.setHeight(element.attributeValue("height"));
-		decision.setConnections(parseConnections(element));
-		List<DecisionItem> items=new ArrayList<DecisionItem>();
-		for(Object obj:element.elements()){
-			if(obj==null || !(obj instanceof Element)){
-				continue;
-			}
-			Element ele=(Element)obj;
-			if(!ele.getName().equals("item")){
-				continue;
-			}
-			DecisionItem item=parseDecisionItem(ele);
-			items.add(item);
-		}
-		decision.setItems(items);
-		return decision;
-	}
-	
-	private DecisionItem parseDecisionItem(Element element){
-		DecisionItem item=new DecisionItem();
-		item.setTo(element.attributeValue("connection"));
-		String script=element.getStringValue();
-		item.setScript(script);
-		String percent=element.attributeValue("percent");
-		if(StringUtils.isNotEmpty(percent)){
-			item.setPercent(Integer.valueOf(percent));			
-		}
-		return item;
-	}
-	
-	public boolean support(String name) {
-		return name.equals("decision");
-	}
+    private LhsParser lhsParser;
+
+    public DecisionNodeParser() {
+    }
+
+    public DecisionNode parse(Element element) {
+        DecisionNode decision = new DecisionNode(element.attributeValue("name"));
+        decision.setEventBean(element.attributeValue("event-bean"));
+        String decitionType = element.attributeValue("decision-type");
+        if (StringUtils.isNotEmpty(decitionType)) {
+            decision.setDecisionType(DecisionType.valueOf(decitionType));
+        }
+
+        decision.setX(element.attributeValue("x"));
+        decision.setY(element.attributeValue("y"));
+        decision.setWidth(element.attributeValue("width"));
+        decision.setHeight(element.attributeValue("height"));
+        decision.setConnections(this.parseConnections(element));
+        List<DecisionItem> items = new ArrayList();
+        Iterator var5 = element.elements().iterator();
+
+        while (var5.hasNext()) {
+            Object obj = var5.next();
+            if (obj != null && obj instanceof Element) {
+                Element ele = (Element) obj;
+                if (ele.getName().equals("item")) {
+                    DecisionItem item = this.parseDecisionItem(ele);
+                    items.add(item);
+                }
+            }
+        }
+
+        decision.setItems(items);
+        return decision;
+    }
+
+    private DecisionItem parseDecisionItem(Element element) {
+        DecisionItem item = new DecisionItem();
+        item.setTo(element.attributeValue("connection"));
+        String percent = element.attributeValue("percent");
+        if (StringUtils.isNotEmpty(percent)) {
+            item.setPercent(Integer.valueOf(percent));
+        }
+
+        String conditionType = element.attributeValue("condition-type");
+        if (conditionType == null) {
+            conditionType = "script";
+        }
+
+        item.setConditionType(conditionType);
+        if (conditionType.equals("script")) {
+            String script = element.getStringValue();
+            item.setScript(script);
+        } else {
+            Iterator var8 = element.elements().iterator();
+
+            while (var8.hasNext()) {
+                Object obj = var8.next();
+                if (obj != null && obj instanceof Element) {
+                    Element ele = (Element) obj;
+                    if (this.lhsParser.support(ele.getName())) {
+                        item.setLhs(this.lhsParser.parse(ele));
+                        item.setLhsXml(ele.asXML());
+                    }
+                }
+            }
+        }
+
+        return item;
+    }
+
+    public boolean support(String name) {
+        return name.equals("decision");
+    }
+
+    public void setLhsParser(LhsParser lhsParser) {
+        this.lhsParser = lhsParser;
+    }
 }

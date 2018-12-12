@@ -1,172 +1,143 @@
-/*******************************************************************************
- * Copyright 2017 Bstek
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package com.bstek.urule.model.rete.builder;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.bstek.urule.model.Node;
-import com.bstek.urule.model.library.variable.VariableCategory;
 import com.bstek.urule.model.rete.BaseReteNode;
 import com.bstek.urule.model.rete.ConditionNode;
 import com.bstek.urule.model.rete.CriteriaNode;
-import com.bstek.urule.model.rete.NamedCriteriaNode;
 import com.bstek.urule.model.rete.ObjectTypeNode;
 import com.bstek.urule.model.rete.ReteNode;
 import com.bstek.urule.model.rule.lhs.BaseCriteria;
 import com.bstek.urule.model.rule.lhs.BaseCriterion;
 import com.bstek.urule.model.rule.lhs.Criteria;
 import com.bstek.urule.model.rule.lhs.Criterion;
-import com.bstek.urule.model.rule.lhs.NamedCriteria;
 
-public abstract class CriterionBuilder{
-	public abstract BaseReteNode buildCriterion(BaseCriterion c,BuildContext context);
-	public abstract boolean support(Criterion criterion);
-	
-	protected BaseReteNode buildCriteria(Criteria criteria,ConditionNode prevNode,BuildContext context) {
-		String objectType=context.getObjectType(criteria);
-		if(prevNode!=null && !(prevNode instanceof NamedCriteriaNode)){
-			CriteriaNode targetNode=null;
-			boolean match=false;
-			if(objectType.equals(ObjectTypeNode.NON_CLASS)){
-				match=true;
-			}else{
-				String prevObjectType=context.getObjectType(prevNode.getCriteria());
-				if(objectType.equals(prevObjectType)){
-					match=true;
-				}
-			}
-			if(match){
-				List<ReteNode> prevChildrenNodes=prevNode.getChildrenNodes();
-				targetNode = fetchSameCriteriaNode(criteria, prevChildrenNodes);
-				if(targetNode==null){
-					targetNode=new CriteriaNode((Criteria)criteria,context.nextId(),context.currentRuleIsDebug());
-					prevNode.addLine(targetNode);
-				}
-			}else{
-				targetNode=buildCriteriaNode(criteria,context,objectType);
-			}
-			return targetNode;
-		}else{
-			if(objectType.equals(ObjectTypeNode.NON_CLASS)){
-				objectType=HashMap.class.getName();
-			}
-			CriteriaNode criteriaNode=buildCriteriaNode(criteria,context,objectType);
-			return criteriaNode;
-		}
-	}
-	
-	/**
-	 * 带reference name的条件比较特殊，它不需要判断是否有父节点，需要将所有节点都直接挂在ObjectTypeNode下
-	 * @param criteria 命名条件对象
-	 * @param prevNode 上一节点对象
-	 * @param context 上下文对象
-	 * @return 返回命名条件节点对象
-	 */
-	protected NamedCriteriaNode buildNamedCriteria(NamedCriteria criteria,ConditionNode prevNode,BuildContext context){
-		/*if(prevNode!=null){
-			NamedCriteriaNode targetNode=null;
-			String objectType=context.getObjectType(criteria);
-			String prevObjectType=context.getObjectType(criteria);
-			if(objectType.equals(prevObjectType)){
-				List<ReteNode> prevChildrenNodes=prevNode.getChildrenNodes();
-				targetNode = fetchExistNamedCriteriaNode(criteria, prevChildrenNodes);
-				if(targetNode==null){
-					targetNode=new NamedCriteriaNode(criteria,context.nextId());
-					prevNode.addLine(targetNode);
-				}
-			}else{
-				targetNode=buildNewTypeNamedCriteria(criteria,context);
-			}
-			return targetNode;
-		}else{
-			NamedCriteriaNode node=buildNewTypeNamedCriteria(criteria,context);
-			return node;
-		}*/
-		NamedCriteriaNode node=buildNewTypeNamedCriteria(criteria,context);
-		return node;
-	}
-	
-	
-	private CriteriaNode buildCriteriaNode(BaseCriteria criteria,BuildContext context,String objectType) {
-		ObjectTypeNode targetObjectTypeNode=context.buildObjectTypeNode(objectType);
-		List<ReteNode> childrenNodes=targetObjectTypeNode.getChildrenNodes();
-		CriteriaNode targetNode = fetchSameCriteriaNode(criteria, childrenNodes);
-		if(targetNode==null){
-			targetNode=new CriteriaNode((Criteria)criteria,context.nextId(),context.currentRuleIsDebug());
-			targetObjectTypeNode.addLine(targetNode);
-		}
-		return targetNode;
-	}
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
-	private NamedCriteriaNode buildNewTypeNamedCriteria(NamedCriteria criteria,BuildContext context) {
-		VariableCategory category=context.getResourceLibrary().getVariableCategory(criteria.getVariableCategory());
-		String objectType=category.getClazz();
-		ObjectTypeNode targetObjectTypeNode=context.buildObjectTypeNode(objectType);
-		List<ReteNode> childrenNodes=targetObjectTypeNode.getChildrenNodes();
-		NamedCriteriaNode targetNode = fetchExistNamedCriteriaNode(criteria,childrenNodes);
-		if(targetNode==null){
-			targetNode=new NamedCriteriaNode(criteria,context.nextId(),context.currentRuleIsDebug());	
-			targetObjectTypeNode.addLine(targetNode);
-		}
-		return targetNode;
-	}
-	
-	private CriteriaNode fetchSameCriteriaNode(BaseCriteria criteria,List<ReteNode> childrenNodes) {
-		String conditionId=criteria.getId();
-		CriteriaNode targetNode=null;
-		for(Node node:childrenNodes){
-			if(!(node instanceof ConditionNode)){
-				continue;
-			}
-			if(criteria instanceof Criteria){
-				if(!(node instanceof CriteriaNode)){
-					continue;
-				}
-			}
-			if(criteria instanceof NamedCriteria){
-				if(!(node instanceof NamedCriteriaNode)){
-					continue;
-				}
-			}
-			ConditionNode baseNode=(ConditionNode)node;
-			String nodeId=baseNode.getCriteriaInfo();
-			if(nodeId.equals(conditionId)){
-				targetNode=(CriteriaNode)baseNode;
-				break;
-			}
-		}
-		return targetNode;
-	}
-	
-	
-	private NamedCriteriaNode fetchExistNamedCriteriaNode(NamedCriteria criteria,List<ReteNode> childrenNodes) {
-		String conditionId=criteria.getId();
-		NamedCriteriaNode targetNode=null;
-		for(Node node:childrenNodes){
-			if(!(node instanceof NamedCriteriaNode)){
-				continue;
-			}
-			NamedCriteriaNode baseNode=(NamedCriteriaNode)node;
-			String nodeId=baseNode.getCriteriaInfo();
-			if(nodeId.equals(conditionId)){
-				targetNode=baseNode;
-				break;
-			}
-		}
-		return targetNode;
-	}
+public abstract class CriterionBuilder {
+    public CriterionBuilder() {
+    }
+
+    public abstract List<BaseReteNode> buildCriterion(BaseCriterion var1, BuildContext var2);
+
+    public abstract boolean support(Criterion var1);
+
+    protected List<BaseReteNode> buildCriteria(Criteria criteria, List<ConditionNode> prevNodes, BuildContext context) {
+        List<BaseReteNode> result = new ArrayList();
+        List<String> objectTypes = context.getObjectType(criteria);
+        if (prevNodes != null && prevNodes.size() > 0) {
+            Iterator var12 = prevNodes.iterator();
+
+            while (var12.hasNext()) {
+                ConditionNode prevNode = (ConditionNode) var12.next();
+                boolean match = true;
+                List<String> prevObjectTypes = context.getObjectType(prevNode.getCriteria());
+                Iterator targetNode;
+                if (prevObjectTypes.size() == objectTypes.size()) {
+                    targetNode = prevObjectTypes.iterator();
+
+                    while (targetNode.hasNext()) {
+                        String prevType = (String) targetNode.next();
+                        if (!objectTypes.contains(prevType)) {
+                            match = false;
+                            break;
+                        }
+                    }
+                } else {
+                    match = false;
+                }
+
+                targetNode = null;
+                CriteriaNode criteriaNode;
+                if (match) {
+                    List<ReteNode> prevChildrenNodes = prevNode.getChildrenNodes();
+                    criteriaNode = this.fetchSameCriteriaNode(criteria, prevChildrenNodes);
+                    if (criteriaNode == null) {
+                        criteriaNode = new CriteriaNode(criteria, context.nextId(), context.currentRuleIsDebug());
+                        prevNode.addLine(criteriaNode);
+                    }
+
+                    result.add(criteriaNode);
+                } else {
+                    criteriaNode = this.buildCriteriaNode(criteria, context, objectTypes);
+                    result.add(criteriaNode);
+                }
+            }
+        } else {
+            CriteriaNode criteriaNode = this.buildCriteriaNode(criteria, context, objectTypes);
+            result.add(criteriaNode);
+        }
+
+        return result;
+    }
+
+    private CriteriaNode buildCriteriaNode(BaseCriteria criteria, BuildContext context, List<String> objectTypes) {
+        CriteriaNode targetNode = null;
+        ObjectTypeNode targetObjectTypeNode = null;
+        Iterator var6 = objectTypes.iterator();
+
+        String objectType;
+        while (var6.hasNext()) {
+            objectType = (String) var6.next();
+            if (objectType.equals("*")) {
+                objectType = HashMap.class.getName();
+            }
+
+            targetObjectTypeNode = context.buildObjectTypeNode(objectType);
+            if (targetNode == null) {
+                List<ReteNode> childrenNodes = targetObjectTypeNode.getChildrenNodes();
+                targetNode = this.fetchSameCriteriaNode(criteria, childrenNodes);
+            } else {
+                targetObjectTypeNode.addLine(targetNode);
+            }
+        }
+
+        if (targetNode == null) {
+            var6 = objectTypes.iterator();
+
+            while (var6.hasNext()) {
+                objectType = (String) var6.next();
+                if (objectType.equals("*")) {
+                    objectType = HashMap.class.getName();
+                }
+
+                targetObjectTypeNode = context.buildObjectTypeNode(objectType);
+                if (targetNode == null) {
+                    targetNode = new CriteriaNode((Criteria) criteria, context.nextId(), context.currentRuleIsDebug());
+                    targetObjectTypeNode.addLine(targetNode);
+                } else {
+                    targetObjectTypeNode.addLine(targetNode);
+                }
+            }
+        }
+
+        return targetNode;
+    }
+
+    private CriteriaNode fetchSameCriteriaNode(BaseCriteria criteria, List<ReteNode> childrenNodes) {
+        String conditionId = criteria.getId();
+        CriteriaNode targetNode = null;
+        Iterator var5 = childrenNodes.iterator();
+
+        while (var5.hasNext()) {
+            Node node = (Node) var5.next();
+            if (node instanceof ConditionNode && (!(criteria instanceof Criteria) || node instanceof CriteriaNode)) {
+                ConditionNode baseNode = (ConditionNode) node;
+                String nodeId = baseNode.getCriteriaInfo();
+                if (nodeId.equals(conditionId)) {
+                    targetNode = (CriteriaNode) baseNode;
+                    break;
+                }
+            }
+        }
+
+        return targetNode;
+    }
 }

@@ -25,7 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 
 import com.bstek.urule.Configure;
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.builder.RulesRebuilder;
 import com.bstek.urule.model.library.ResourceLibrary;
 import com.bstek.urule.model.library.variable.Variable;

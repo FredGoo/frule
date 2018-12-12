@@ -17,10 +17,14 @@ package com.bstek.urule.runtime.agenda;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
+import com.bstek.urule.Utils;
 import com.bstek.urule.action.ActionValue;
+import com.bstek.urule.model.rule.Rule;
 import com.bstek.urule.model.rule.RuleInfo;
+import com.bstek.urule.runtime.KnowledgeSession;
 import com.bstek.urule.runtime.KnowledgeSessionImpl;
 import com.bstek.urule.runtime.WorkingMemory;
 import com.bstek.urule.runtime.response.ExecutionResponseImpl;
@@ -35,14 +39,12 @@ import com.bstek.urule.runtime.rete.ReteInstance;
  */
 public class Agenda {
     private Context context;
-    private List<RuleBox> ruleBoxes = new ArrayList<>();
+    private RuleBox ruleBox;
     private List<RuleInfo> matchedRules = new ArrayList<>();
 
-    public Agenda(WorkingMemory workingMemory, Context context) {
+    public Agenda(Context context) {
         this.context = context;
-        ruleBoxes.add(new AgendaGroupRuleBox(context, matchedRules));
-        ruleBoxes.add(new ActivationGroupRuleBox(context, matchedRules));
-        ruleBoxes.add(new ActivationRuleBox(context, matchedRules));
+        this.ruleBox = new ActivationRuleBox(context, this.matchedRules);
     }
 
     public RuleExecutionResponse execute(AgendaFilter filter, int max) {
@@ -50,64 +52,50 @@ public class Agenda {
         List<ActionValue> actionValues = new ArrayList<>();
         response.setActionValues(actionValues);
         List<RuleInfo> firedRules = new ArrayList<>();
-        RuleBox ruleBox = nextRuleBox();
-        while (ruleBox != null) {
-            List<RuleInfo> ruleInfoResult = ruleBox.execute(filter, max - firedRules.size(), actionValues);
-            if (ruleInfoResult != null && ruleInfoResult.size() > 0) {
-                firedRules.addAll(ruleInfoResult);
-            }
-            if (firedRules.size() >= max) {
-                break;
-            }
-            ruleBox = nextRuleBox();
-        }
-
-        KnowledgeSessionImpl session = (KnowledgeSessionImpl) context.getWorkingMemory();
+        List<RuleInfo> ruleInfoResult = this.ruleBox.execute(filter, max, actionValues);
+        firedRules.addAll(ruleInfoResult);
+        KnowledgeSession session = (KnowledgeSession) this.context.getWorkingMemory();
         List<ReteInstance> reteInstanceList = session.getReteInstanceList();
-        for (ReteInstance reteInstance : reteInstanceList) {
+        Iterator var9 = reteInstanceList.iterator();
+
+        while (var9.hasNext()) {
+            ReteInstance reteInstance = (ReteInstance) var9.next();
             reteInstance.reset();
         }
-        session.getAllFacts().clear();
+
         response.setFiredRules(firedRules);
-        response.addMatchedRules(matchedRules);
+        response.addMatchedRules(this.matchedRules);
         return response;
     }
 
-    private RuleBox nextRuleBox() {
-        for (RuleBox ruleBox : ruleBoxes) {
-            RuleBox next = ruleBox.next();
-            if (next != null) {
-                return next;
-            }
-        }
-        return null;
-    }
+    public void addTrackers(Collection<FactTracker> list, boolean noCondition) {
+        Iterator var3 = list.iterator();
 
-    public void addTrackers(Collection<FactTracker> list) {
-        for (FactTracker tracker : list) {
-            Activation activation = tracker.getActivation();
-            for (RuleBox ruleBox : ruleBoxes) {
-                boolean add = ruleBox.add(activation);
-                if (add) {
-                    break;
+        while (true) {
+            while (var3.hasNext()) {
+                FactTracker tracker = (FactTracker) var3.next();
+                Activation activation = tracker.getActivation();
+                Rule rule = activation.getRule();
+                if (noCondition && rule.isWithElse()) {
+                    if (!this.ruleBox.getRules().contains(rule)) {
+                        Rule elseRule = Utils.buildElseRule(rule);
+                        ActivationImpl ac = new ActivationImpl(elseRule);
+                        this.ruleBox.add(ac);
+                    }
+                } else {
+                    this.ruleBox.add(activation);
                 }
             }
+
+            return;
         }
     }
 
     public void retract(Object obj) {
-        for (RuleBox ruleBox : ruleBoxes) {
-            ruleBox.retract(obj);
-        }
-    }
-
-    public List<RuleBox> getRuleBoxes() {
-        return ruleBoxes;
+        this.ruleBox.retract(obj);
     }
 
     public void clean() {
-        for (RuleBox ruleBox : ruleBoxes) {
-            ruleBox.clean();
-        }
+        this.ruleBox.clean();
     }
 }

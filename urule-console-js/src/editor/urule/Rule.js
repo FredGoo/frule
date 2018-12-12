@@ -18,13 +18,14 @@ urule.Rule=function(parent,container,data){
 	this.initData();
 };
 urule.Rule.prototype.init=function(){
-	this.ruleContainer=$("<div>");
+	this.ruleContainer=$("<div class='collapse' id='"+this.uuid+"-container'>");
 	this.container.append(this.ruleContainer);
     this.initRemark();
 	this.initHeader();
 	this.initIf();
 	this.initThen();
 	this.initElse();
+    this.initParent();
 };
 urule.Rule.prototype.initData=function(){
 	if(!this.data){
@@ -132,6 +133,20 @@ urule.Rule.prototype.addProperty=function(property){
 	this.properties.push(property);
 	window._setDirty();
 };
+urule.Rule.prototype.initParent=function(){
+	var message;
+	if(this.data!=null){
+		message=this.data.remark;
+	}else {
+		message=this.remark.defaultRemark;
+	}
+    var uruelsh= $("<div>"+message+"</div>");
+    var uuid = this.uuid;
+    uruelsh.click(function () {
+        $("#"+uuid+"-container").collapse("toggle");
+    });
+    this.container.prepend(uruelsh);
+};
 urule.Rule.prototype.initRemark=function(){
 	var remarkContainer=$("<div></div>");
     this.remark=new Remark(remarkContainer);
@@ -140,7 +155,7 @@ urule.Rule.prototype.initRemark=function(){
 urule.Rule.prototype.initHeader=function(){
 	this.nameContainer=$("<div></div>");
 	this.ruleContainer.append(this.nameContainer);
-	this.label=$("<span style='line-height:30px'><Strong>规则 <Strong></span>");
+	this.label=$("<span style='line-height:30px'><Strong>规则编号 <Strong></span>");
 	this.nameContainer.append(this.label);
 	this.nameEditor=$(`<input type='text' class="form-control rule-text-editor">`).hide();
 	this.name="rule";

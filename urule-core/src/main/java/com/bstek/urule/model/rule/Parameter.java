@@ -17,7 +17,7 @@ package com.bstek.urule.model.rule;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.model.library.Datatype;
 
 /**

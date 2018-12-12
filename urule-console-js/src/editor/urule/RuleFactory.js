@@ -78,6 +78,7 @@ import {MsgBox} from 'flowdesigner';
 		
 		$("#saveButton").click(function(){
 			save(false);
+            window.location.reload();
 		});
 		$("#saveButtonNewVersion").click(function(){
 			save(true);

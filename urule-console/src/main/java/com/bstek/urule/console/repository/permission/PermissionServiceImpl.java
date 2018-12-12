@@ -17,7 +17,7 @@ package com.bstek.urule.console.repository.permission;
 
 import java.util.List;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.console.EnvironmentUtils;
 import com.bstek.urule.console.User;
 import com.bstek.urule.console.repository.RepositoryService;

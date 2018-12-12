@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.dsl.DSLRuleSetBuilder;
 import com.bstek.urule.model.rule.Library;
 import com.bstek.urule.model.rule.LibraryType;

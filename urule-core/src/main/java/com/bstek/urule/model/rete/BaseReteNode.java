@@ -22,7 +22,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.model.rule.Value;
 import com.bstek.urule.runtime.rete.Context;
 

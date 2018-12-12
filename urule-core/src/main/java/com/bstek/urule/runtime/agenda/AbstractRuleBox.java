@@ -17,6 +17,7 @@ package com.bstek.urule.runtime.agenda;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.bstek.urule.model.rule.Rule;
@@ -37,22 +38,30 @@ public abstract class AbstractRuleBox implements RuleBox {
 
     public AbstractRuleBox(Context context, List<RuleInfo> executedRules) {
         this.context = context;
-        this.rules = new ArrayList<Rule>();
+        this.rules = new ArrayList();
         this.executedRules = executedRules;
     }
 
     protected void retract(Object obj, List<Activation> activations) {
-        List<Activation> needRemovedList = new ArrayList<Activation>();
-        for (Activation activation : activations) {
+        List<Activation> needRemovedList = new ArrayList();
+        Iterator var4 = activations.iterator();
+
+        while (var4.hasNext()) {
+            Activation activation = (Activation) var4.next();
             if (activation.contain(obj)) {
                 needRemovedList.add(activation);
             }
         }
-        KnowledgeSession session = (KnowledgeSession) context.getWorkingMemory();
-        for (Activation ac : needRemovedList) {
+
+        KnowledgeSession session = (KnowledgeSession) this.context.getWorkingMemory();
+        Iterator var7 = needRemovedList.iterator();
+
+        while (var7.hasNext()) {
+            Activation ac = (Activation) var7.next();
             activations.remove(ac);
             session.fireEvent(new ActivationCancelledEventImpl(ac, session));
         }
+
     }
 
     protected boolean addActivation(Activation activation, List<Activation> list) {
@@ -63,39 +72,25 @@ public abstract class AbstractRuleBox implements RuleBox {
 
     protected boolean activationShouldAdd(Activation activation) {
         Rule rule = activation.getRule();
-        for (Rule r : rules) {
-            if (r.equals(rule)) {
-                if (r.getLoop() != null && r.getLoop()) {
-                    return true;
-                } else {
-                    return false;
-                }
+        Iterator var3 = this.rules.iterator();
+
+        Rule r;
+        do {
+            if (!var3.hasNext()) {
+                return true;
             }
+
+            r = (Rule) var3.next();
+        } while (!r.equals(rule));
+
+        if (r.getLoop() != null && r.getLoop()) {
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
-
-    @Override
     public List<Rule> getRules() {
-        return rules;
-    }
-
-    protected List<Activation> reevaluate(Object obj, List<Activation> activations, EvaluationContext context) {
-        List<Activation> needRemoved = new ArrayList<Activation>();
-        for (Activation activation : activations) {
-            if (activation.isProcessed()) {
-                continue;
-            }
-            if (!activation.reevaluate(obj, context)) {
-                needRemoved.add(activation);
-            }
-        }
-        KnowledgeSession session = (KnowledgeSession) context.getWorkingMemory();
-        for (Activation ac : needRemoved) {
-            activations.remove(ac);
-            session.fireEvent(new ActivationCancelledEventImpl(ac, session));
-        }
-        return needRemoved;
+        return this.rules;
     }
 }

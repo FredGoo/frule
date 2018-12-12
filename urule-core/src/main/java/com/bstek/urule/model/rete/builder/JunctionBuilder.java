@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Bstek
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -22,18 +22,21 @@ import com.bstek.urule.model.rule.lhs.Criterion;
 import com.bstek.urule.model.rule.lhs.Junction;
 import com.bstek.urule.model.rule.lhs.NamedCriteria;
 
-public abstract class JunctionBuilder extends CriterionBuilder{
-	protected BaseReteNode buildCriterion(Criterion criterion,BuildContext context,ConditionNode prevCriteriaNode){
-		if(criterion instanceof Junction){
-			Junction junction=(Junction)criterion;
-			return ReteBuilder.buildCriterion(context, junction);
-		}else if(criterion instanceof Criteria){
-			Criteria criteria=(Criteria)criterion;
-			return buildCriteria(criteria,prevCriteriaNode,context);
-		}else if(criterion instanceof NamedCriteria){
-			NamedCriteria criteria=(NamedCriteria)criterion;
-			return buildNamedCriteria(criteria, prevCriteriaNode, context);
-		}
-		return null;
-	}
+import java.util.List;
+
+public abstract class JunctionBuilder extends CriterionBuilder {
+    public JunctionBuilder() {
+    }
+
+    protected List<BaseReteNode> buildCriterion(Criterion criterion, BuildContext context, List<ConditionNode> prevCriteriaNodes) {
+        if (criterion instanceof Junction) {
+            Junction junction = (Junction) criterion;
+            return ReteBuilder.buildCriterion(context, junction);
+        } else if (criterion instanceof Criteria) {
+            Criteria criteria = (Criteria) criterion;
+            return this.buildCriteria(criteria, prevCriteriaNodes, context);
+        } else {
+            return null;
+        }
+    }
 }

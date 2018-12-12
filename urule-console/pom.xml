@@ -3,15 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>geex-architecture</groupId>
-        <artifactId>urule-parent</artifactId>
-        <version>2.0.4</version>
+        <groupId>gyqw</groupId>
+        <artifactId>frule-parent</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
-    <name>URule Console Project</name>
-    <artifactId>urule-console</artifactId>
-    <version>2.1.7-SNAPSHOT</version>
-    <url>https://github.com/youseries/urule/tree/master/urule-console</url>
+    <name>FRule Console Project</name>
+    <artifactId>frule-console</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>

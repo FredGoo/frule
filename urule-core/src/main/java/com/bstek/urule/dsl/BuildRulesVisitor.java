@@ -30,7 +30,7 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import com.bstek.urule.Configure;
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.action.Action;
 import com.bstek.urule.dsl.RuleParserParser.ActionContext;
 import com.bstek.urule.dsl.RuleParserParser.AttributeContext;

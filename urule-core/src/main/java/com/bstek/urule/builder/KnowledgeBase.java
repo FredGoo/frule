@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Bstek
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -16,6 +16,7 @@
 package com.bstek.urule.builder;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,67 +31,77 @@ import com.bstek.urule.runtime.KnowledgePackageImpl;
 
 /**
  * @author Jacky.gao
- * @since 2014年12月22日
+ * 2014年12月22日
  */
 public class KnowledgeBase {
-	private ResourceLibrary resourceLibrary;
-	private Map<String,FlowDefinition> flowMap;
-	private Rete rete;
-	private KnowledgePackageImpl knowledgePackage;
-	private List<Rule> noLhsRules;
-	public KnowledgeBase(Rete rete) {
-		this(rete, null, null);
-	}
-	protected KnowledgeBase(Rete rete,Map<String,FlowDefinition> flowMap,List<Rule> noLhsRules) {
-		this.rete=rete;
-		this.resourceLibrary=rete.getResourceLibrary();
-		this.flowMap=flowMap;
-		this.noLhsRules=noLhsRules;
-	}
-	
-	public KnowledgePackage getKnowledgePackage(){
-		if(knowledgePackage!=null){
-			return knowledgePackage;
-		}
-		knowledgePackage=new KnowledgePackageImpl();
-		knowledgePackage.setRete(rete);
-		knowledgePackage.setNoLhsRules(noLhsRules);
-		knowledgePackage.setFlowMap(flowMap);
-		knowledgePackage.buildWithElseRules();
-		
-		Map<String,String> variableCategoryMap=new HashMap<String,String>();
-		knowledgePackage.setVariableCategoryMap(variableCategoryMap);
-		List<VariableCategory> variableCategories=resourceLibrary.getVariableCategories();
-		Map<String,String> parameters=new HashMap<String,String>();
-		knowledgePackage.setParameters(parameters);
-		for(VariableCategory category:variableCategories){
-			String name=category.getName();
-			variableCategoryMap.put(name, category.getClazz());
-			if(name.equals(VariableCategory.PARAM_CATEGORY)){
-				List<Variable> variables=category.getVariables();
-				if(variables==null || variables.size()==0){
-					continue;
-				}
-				for(Variable var:variables){
-					parameters.put(var.getName(), var.getType().name());
-				}
-			}
-		}
-		return knowledgePackage;
-	}
-	
-	
-	public List<Rule> getNoLhsRules() {
-		return noLhsRules;
-	}
+    private ResourceLibrary resourceLibrary;
+    private Map<String, FlowDefinition> flowMap;
+    private Rete rete;
+    private KnowledgePackageImpl knowledgePackage;
 
-	public Rete getRete() {
-		return rete;
-	}
-	public ResourceLibrary getResourceLibrary() {
-		return resourceLibrary;
-	}
-	public Map<String, FlowDefinition> getFlowMap() {
-		return flowMap;
-	}
+    public KnowledgeBase(Rete rete) {
+        this(rete, null);
+    }
+
+    protected KnowledgeBase(Rete rete, Map<String, FlowDefinition> flowMap) {
+        this.rete = rete;
+        this.resourceLibrary = rete.getResourceLibrary();
+        this.flowMap = flowMap;
+    }
+
+    public KnowledgePackage getKnowledgePackage() {
+        if (this.knowledgePackage != null) {
+            return this.knowledgePackage;
+        } else {
+            this.knowledgePackage = new KnowledgePackageImpl();
+            this.knowledgePackage.setRete(this.rete);
+            this.knowledgePackage.setFlowMap(this.flowMap);
+            Map<String, String> variableCategoryMap = new HashMap<>();
+            this.knowledgePackage.setVariableCategoryMap(variableCategoryMap);
+            List<VariableCategory> variableCategories = this.resourceLibrary.getVariableCategories();
+            Map<String, String> parameters = new HashMap<>();
+            this.knowledgePackage.setParameters(parameters);
+            Iterator var4 = variableCategories.iterator();
+
+            while (true) {
+                List variables;
+                do {
+                    do {
+                        VariableCategory category;
+                        String name;
+                        do {
+                            if (!var4.hasNext()) {
+                                return this.knowledgePackage;
+                            }
+
+                            category = (VariableCategory) var4.next();
+                            name = category.getName();
+                            variableCategoryMap.put(name, category.getClazz());
+                        } while (!name.equals("参数"));
+
+                        variables = category.getVariables();
+                    } while (variables == null);
+                } while (variables.size() == 0);
+
+                Iterator var8 = variables.iterator();
+
+                while (var8.hasNext()) {
+                    Variable var = (Variable) var8.next();
+                    parameters.put(var.getName(), var.getType().name());
+                }
+            }
+        }
+    }
+
+    public Rete getRete() {
+        return this.rete;
+    }
+
+    public ResourceLibrary getResourceLibrary() {
+        return this.resourceLibrary;
+    }
+
+    public Map<String, FlowDefinition> getFlowMap() {
+        return this.flowMap;
+    }
 }

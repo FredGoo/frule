@@ -13,9 +13,40 @@
         </property>
     </bean>
 
+    <bean id="urule.crosstableDeserializer" class="com.bstek.urule.parse.deserializer.CrosstableDeserializer">
+        <property name="crosstabParser" ref="urule.crosstabParser"/>
+    </bean>
+
+    <bean id="urule.crosstabResourceBuilder" class="com.bstek.urule.builder.resource.CrosstabResourceBuilder">
+        <property name="crosstableDeserializer" ref="urule.crosstableDeserializer"/>
+    </bean>
+
+    <bean id="urule.propertyConfigurer" class="com.bstek.urule.PropertyConfigurer">
+    </bean>
+
+    <bean id="urule.crosstabParser" class="com.bstek.urule.parse.crosstab.CrosstabParser">
+        <property name="crossRowParser" ref="urule.crossRowParser"/>
+        <property name="crossColumnParser" ref="urule.crossColumnParser"/>
+        <property name="headerCellParser" ref="urule.headerCellParser"/>
+        <property name="conditionCrossCellParser" ref="urule.conditionCrossCellParser"/>
+        <property name="valueCrossCellParser" ref="urule.valueCrossCellParser"/>
+    </bean>
+
+    <bean id="urule.crossRowParser" class="com.bstek.urule.parse.crosstab.CrossRowParser"/>
+    <bean id="urule.crossColumnParser" class="com.bstek.urule.parse.crosstab.CrossColumnParser"/>
+    <bean id="urule.headerCellParser" class="com.bstek.urule.parse.crosstab.HeaderCellParser"/>
+    <bean id="urule.conditionCrossCellParser" class="com.bstek.urule.parse.crosstab.ConditionCrossCellParser">
+        <property name="jointParser" ref="urule.jointParser"/>
+    </bean>
+    <bean id="urule.valueCrossCellParser" class="com.bstek.urule.parse.crosstab.ValueCrossCellParser">
+        <property name="valueParser" ref="urule.valueParser"/>
+    </bean>
+
     <bean id="urule.defaultHtmlFileDebugWriter" class="com.bstek.urule.debug.DefaultHtmlFileDebugWriter">
         <property name="path" value="${urule.defaultHtmlFileDebugPath}"/>
     </bean>
+
+    <bean id="urule.crosstabRulesBuilder" class="com.bstek.urule.builder.table.CrosstabRulesBuilder"/>
 
     <bean id="urule.knowledgeBuilder" class="com.bstek.urule.builder.KnowledgeBuilder">
         <property name="reteBuilder" ref="urule.reteBuilder"/>
@@ -25,6 +56,7 @@
         <property name="decisionTableRulesBuilder" ref="urule.decisionTableRulesBuilder"/>
         <property name="dslRuleSetBuilder" ref="urule.dslRuleSetBuilder"/>
         <property name="decisionTreeRulesBuilder" ref="urule.decisionTreeRulesBuilder"/>
+        <property name="crosstabRulesBuilder" ref="urule.crosstabRulesBuilder"/>
     </bean>
 
     <bean id="urule.builtInActionLibraryBuilder" class="com.bstek.urule.runtime.BuiltInActionLibraryBuilder"/>
@@ -32,6 +64,10 @@
     <bean id="urule.rulesRebuilder" class="com.bstek.urule.builder.RulesRebuilder">
         <property name="resourceLibraryBuilder" ref="urule.resourceLibraryBuilder"/>
     </bean>
+    <bean id="urule.activeRuleFunctionDescriptor"
+          class="com.bstek.urule.model.function.ActiveRuleFunctionDescriptor"/>
+    <bean id="urule.activeAgendaFunctionDescriptor"
+          class="com.bstek.urule.model.function.ActiveAgendaFunctionDescriptor"/>
     <bean id="urule.sinFunctionDescriptor" class="com.bstek.urule.model.function.impl.SinFunctionDescriptor">
         <property name="disabled" value="${urule.sinFunctionDisabled}"/>
     </bean>
@@ -66,6 +102,13 @@
     <bean id="urule.avgFunctionDescriptor" class="com.bstek.urule.model.function.impl.AvgFunctionDescriptor">
         <property name="disabled" value="${urule.avgFunctionDisabled}"/>
     </bean>
+    <bean id="urule.minValueFunctionDescriptor" class="com.bstek.urule.model.function.impl.MinValueFunctionDescriptor">
+        <property name="disabled" value="${urule.minValueFunctionDisabled}"/>
+    </bean>
+
+    <bean id="urule.maxValueFunctionDescriptor" class="com.bstek.urule.model.function.impl.MaxValueFunctionDescriptor">
+        <property name="disabled" value="${urule.maxValueFunctionDisabled}"/>
+    </bean>
     <bean id="urule.maxFunctionDescriptor" class="com.bstek.urule.model.function.impl.MaxFunctionDescriptor">
         <property name="disabled" value="${urule.maxFunctionDisabled}"/>
     </bean>
@@ -87,6 +130,7 @@
         <property name="dateFormat" value="${urule.dateFormat}"/>
         <property name="tempStorePath" value="${urule.tempStorePath}"/>
     </bean>
+
 
     <bean id="urule.actionContextBuilder" class="com.bstek.urule.dsl.builder.ActionContextBuilder"/>
 
@@ -215,6 +259,7 @@
         <property name="jointParser" ref="urule.jointParser"/>
         <property name="valueParser" ref="urule.valueParser"/>
     </bean>
+    <bean id="urule.complexColumnParser" class="com.bstek.urule.parse.scorecard.ComplexColumnParser"/>
     <bean id="urule.scriptCellParser" class="com.bstek.urule.parse.table.ScriptCellParser"/>
     <bean id="urule.rowParser" class="com.bstek.urule.parse.table.RowParser"/>
     <bean id="urule.columnParser" class="com.bstek.urule.parse.table.ColumnParser"/>
@@ -236,7 +281,9 @@
     </bean>
     <bean id="urule.constantLibraryParser" class="com.bstek.urule.parse.ConstantLibraryParser"/>
     <bean id="urule.actionNodeParser" class="com.bstek.urule.parse.flow.ActionNodeParser"/>
-    <bean id="urule.decisionNodeParser" class="com.bstek.urule.parse.flow.DecisionNodeParser"/>
+    <bean id="urule.decisionNodeParser" class="com.bstek.urule.parse.flow.DecisionNodeParser">
+        <property name="lhsParser" ref="urule.lhsParser"/>
+    </bean>
     <bean id="urule.endNodeParser" class="com.bstek.urule.parse.flow.EndNodeParser"/>
     <bean id="urule.flowDefinitionParser" class="com.bstek.urule.parse.flow.FlowDefinitionParser"/>
     <bean id="urule.forkNodeParser" class="com.bstek.urule.parse.flow.ForkNodeParser"/>
@@ -272,7 +319,6 @@
     <bean id="urule.reteBuilder" class="com.bstek.urule.model.rete.builder.ReteBuilder"/>
 
     <bean id="urule.criteriaBuilder" class="com.bstek.urule.model.rete.builder.CriteriaBuilder"/>
-    <bean id="urule.namedCriteriaBuilder" class="com.bstek.urule.model.rete.builder.NamedCriteriaBuilder"/>
     <bean id="urule.andBuilder" class="com.bstek.urule.model.rete.builder.AndBuilder"/>
     <bean id="urule.orBuilder" class="com.bstek.urule.model.rete.builder.OrBuilder"/>
 
@@ -294,7 +340,8 @@
 
     <bean id="urule.leftParser" class="com.bstek.urule.parse.LeftParser">
         <property name="valueParser" ref="urule.valueParser"/>
-        <property name="arithmeticParser" ref="urule.simpleArithmeticParser"/>
+        <property name="complexArithmeticParser" ref="urule.complexArithmeticParser"/>
+        <property name="simpleArithmeticParser" ref="urule.simpleArithmeticParser"/>
     </bean>
 
     <bean id="urule.criteriaParser" class="com.bstek.urule.parse.CriteriaParser">
@@ -302,9 +349,6 @@
         <property name="leftParser" ref="urule.leftParser"/>
     </bean>
     <bean id="urule.junctionParser" class="com.bstek.urule.parse.JunctionParser"/>
-    <bean id="urule.namedJunctionParser" class="com.bstek.urule.parse.NamedJunctionParser">
-        <property name="valueParser" ref="urule.valueParser"/>
-    </bean>
 
     <bean id="urule.variableLibraryParser" class="com.bstek.urule.parse.VariableLibraryParser">
         <property name="variableCategoryParser" ref="urule.variableCategoryParser"/>
@@ -363,6 +407,11 @@
         <property name="scorecardParser" ref="urule.scorecardParser"/>
     </bean>
 
+    <bean id="urule.complexScorecardDeserializer"
+          class="com.bstek.urule.parse.deserializer.ComplexScorecardDeserializer">
+        <property name="complexScorecardParser" ref="urule.complexScorecardParser"/>
+    </bean>
+
     <bean id="urule.actionTreeNodeParser" class="com.bstek.urule.parse.decisiontree.ActionTreeNodeParser"/>
     <bean id="urule.variableTreeNodeParser" class="com.bstek.urule.parse.decisiontree.VariableTreeNodeParser">
         <property name="leftParser" ref="urule.leftParser"/>
@@ -373,6 +422,12 @@
         <property name="variableTreeNodeParser" ref="urule.variableTreeNodeParser"/>
         <property name="actionTreeNodeParser" ref="urule.actionTreeNodeParser"/>
     </bean>
+    <bean id="urule.complexScorecardParser" class="com.bstek.urule.parse.scorecard.ComplexScorecardParser">
+        <property name="rowParser" ref="urule.rowParser"/>
+        <property name="columnParser" ref="urule.complexColumnParser"/>
+        <property name="cellParser" ref="urule.cellParser"/>
+        <property name="rulesRebuilder" ref="urule.rulesRebuilder"/>
+    </bean>
 
     <bean id="urule.decisionTreeRulesBuilder" class="com.bstek.urule.builder.DecisionTreeRulesBuilder"/>
 
@@ -381,6 +436,14 @@
         <property name="resourceLibraryBuilder" ref="urule.resourceLibraryBuilder"/>
         <property name="scorecardDeserializer" ref="urule.scorecardDeserializer"/>
         <property name="rulesRebuilder" ref="urule.rulesRebuilder"/>
+    </bean>
+
+    <bean id="urule.complexScorecardRulesBuilder" class="com.bstek.urule.builder.resource.ComplexScorecardRulesBuilder">
+        <property name="reteBuilder" ref="urule.reteBuilder"/>
+        <property name="resourceLibraryBuilder" ref="urule.resourceLibraryBuilder"/>
+        <property name="rulesRebuilder" ref="urule.rulesRebuilder"/>
+        <property name="cellContentBuilder" ref="urule.cellContentBuilder"/>
+        <property name="complexScorecardDeserializer" ref="urule.complexScorecardDeserializer"/>
     </bean>
 
     <bean id="urule.decisionTreeDeserializer" class="com.bstek.urule.parse.deserializer.DecisionTreeDeserializer">

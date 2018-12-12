@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Bstek
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -17,8 +17,32 @@ package com.bstek.urule.console.repository.model;
 
 /**
  * @author Jacky.gao
- * @since 2016年5月26日
+ * @author fred
+ * 2016年5月26日
  */
 public enum Type {
-	root, project, resource, resourcePackage, lib, action, parameter, constant, variable, ruleLib, decisionTableLib, decisionTreeLib, scorecardLib,flowLib, scorecard,rule, ul, decisionTable, scriptDecisionTable, decisionTree, flow, all, folder;
+    root,
+    project,
+    resource,
+    resourcePackage,
+    lib,
+    action,
+    parameter,
+    constant,
+    variable,
+    ruleLib,
+    decisionTableLib,
+    decisionTreeLib,
+    scorecardLib,
+    flowLib,
+    complexscorecard,
+    scorecard,
+    rule,
+    ul,
+    decisionTable,
+    scriptDecisionTable,
+    decisionTree,
+    flow,
+    all,
+    folder;
 }

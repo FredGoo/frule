@@ -17,7 +17,7 @@ package com.bstek.urule.dsl.builder;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.dsl.RuleParserParser.ResourceContext;
 import com.bstek.urule.model.rule.Library;
 import com.bstek.urule.model.rule.LibraryType;

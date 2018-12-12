@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.action.Action;
 import com.bstek.urule.action.ConsolePrintAction;
 import com.bstek.urule.action.ExecuteMethodAction;

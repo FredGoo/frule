@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bstek.urule.model.rule.Rule;
+import com.bstek.urule.model.rule.RuleInfo;
+import com.bstek.urule.runtime.ElCompute;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 
@@ -40,63 +43,83 @@ public class ContextImpl implements Context {
     private ValueCompute valueCompute;
     private WorkingMemory workingMemory;
     private List<MessageItem> debugMessageItems;
-    private ElCalculator elCalculator = new ElCalculator();
+    private Rule currentRule;
+    private StringBuilder tipMsgBuilder = new StringBuilder();
 
     public ContextImpl(WorkingMemory workingMemory, ApplicationContext applicationContext, Map<String, String> variableCategoryMap, List<MessageItem> debugMessageItems) {
         this.workingMemory = workingMemory;
         this.applicationContext = applicationContext;
-        this.assertorEvaluator = (AssertorEvaluator) applicationContext.getBean(AssertorEvaluator.BEAN_ID);
+        this.assertorEvaluator = (AssertorEvaluator) applicationContext.getBean("urule.assertorEvaluator");
         this.variableCategoryMap = variableCategoryMap;
         this.debugMessageItems = debugMessageItems;
-        this.valueCompute = (ValueCompute) applicationContext.getBean(ValueCompute.BEAN_ID);
+        this.valueCompute = (ValueCompute) applicationContext.getBean("urule.valueCompute");
     }
 
-    @Override
+    public void addTipMsg(String msg) {
+        if (this.tipMsgBuilder.length() > 0) {
+            this.tipMsgBuilder.append(">>");
+        }
+
+        this.tipMsgBuilder.append(msg);
+    }
+
+    public void cleanTipMsg() {
+        this.tipMsgBuilder.delete(0, this.tipMsgBuilder.length());
+    }
+
+    public String getTipMsg() {
+        return this.tipMsgBuilder.length() > 0 ? this.tipMsgBuilder.toString() : null;
+    }
+
     public WorkingMemory getWorkingMemory() {
-        return workingMemory;
+        return this.workingMemory;
     }
 
     public ApplicationContext getApplicationContext() {
-        return applicationContext;
+        return this.applicationContext;
     }
 
     public AssertorEvaluator getAssertorEvaluator() {
-        return assertorEvaluator;
+        return this.assertorEvaluator;
     }
 
-    @Override
     public Object parseExpression(String expression) {
-        return elCalculator.eval(expression);
+        return (new ElCompute()).doCompute(expression);
     }
 
-    @Override
     public void debugMsg(String msg, MsgType type, boolean enableDebug) {
-        if (!Utils.isDebug() || !enableDebug) {
-            return;
+        if (Utils.isDebug() && enableDebug) {
+            if (!Utils.isDebugToFile()) {
+                System.out.println(msg);
+            } else {
+                MessageItem item = new MessageItem(msg, type);
+                this.debugMessageItems.add(item);
+            }
         }
-        if (!Utils.isDebugToFile()) {
-            System.out.println(msg);
-            return;
-        }
-        MessageItem item = new MessageItem(msg, type);
-        debugMessageItems.add(item);
     }
 
-    @Override
     public List<MessageItem> getDebugMessageItems() {
-        return debugMessageItems;
+        return this.debugMessageItems;
     }
 
     public String getVariableCategoryClass(String variableCategory) {
-        String clazz = variableCategoryMap.get(variableCategory);
+        String clazz = (String) this.variableCategoryMap.get(variableCategory);
         if (StringUtils.isEmpty(clazz)) {
-            //throw new RuleException("Variable category ["+variableCategory+"] not exist.");
             clazz = HashMap.class.getName();
         }
+
         return clazz;
     }
 
     public ValueCompute getValueCompute() {
-        return valueCompute;
+        return this.valueCompute;
+    }
+
+    public void setCurrentRule(Rule currentRule) {
+        this.currentRule = currentRule;
+    }
+
+    public RuleInfo getCurrentRule() {
+        return this.currentRule;
     }
 }

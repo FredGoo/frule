@@ -32,9 +32,7 @@ public interface Activation extends Comparable<Activation> {
 
     Rule getRule();
 
-    boolean reevaluate(Object obj, EvaluationContext context);
+    boolean contain(Object var1);
 
-    boolean contain(Object obj);
-
-    RuleInfo execute(Context context, List<RuleInfo> executedRules, List<ActionValue> actionValues);
+    RuleInfo execute(Context var1, List<RuleInfo> var2, List<ActionValue> var3);
 }

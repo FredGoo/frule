@@ -1,24 +1,25 @@
 /**
- * Created by Jacky.gao on 2016/10/25.
+ * @author Jacky.gao
+ * 2016/10/25
  */
-window.Remark=function (container) {
-    this.remark="";
-    this.defaultRemark="请输入备注内容";
+window.Remark = function (container) {
+    this.remark = "";
+    this.defaultRemark = "请输入备注内容";
     this.init(container);
 };
-Remark.prototype.init=function (container) {
-    var toolbar=$("<div style='cursor:pointer;color:#777;font-size:12px'>备注</div>");
+Remark.prototype.init = function (container) {
+    var toolbar = $("<div style='cursor:pointer;color:#777;font-size:12px'>备注</div>");
     container.append(toolbar);
-    var icon=$("<i class='glyphicon glyphicon-circle-arrow-down'></i>");
+    var icon = $("<i class='glyphicon glyphicon-circle-arrow-down'></i>");
     toolbar.append(icon);
-    var contentContainer=$("<div class='collapse in'></div>");
+    var contentContainer = $("<div class='collapse in'></div>");
     container.append(contentContainer);
-    this.remarkLabel=$("<div style='color:#999;background: #fdfdfd;padding:5px;border:solid 1px #ddd;border-radius: 5px;font-size: 12px'>"+this.defaultRemark+"</div>");
+    this.remarkLabel = $("<div style='color:#999;background: #fdfdfd;padding:5px;border:solid 1px #ddd;border-radius: 5px;font-size: 12px'>" + this.defaultRemark + "</div>");
     contentContainer.append(this.remarkLabel);
-    this.remarkEditor=$("<textarea class='form-control' rows='4'>"+this.defaultRemark+"</textarea>");
+    this.remarkEditor = $("<textarea class='form-control' rows='4'>" + this.defaultRemark + "</textarea>");
     contentContainer.append(this.remarkEditor);
     this.remarkEditor.hide();
-    var _this=this;
+    var _this = this;
     this.remarkLabel.click(function () {
         _this.remarkEditor.show();
         _this.remarkEditor.focus();
@@ -26,16 +27,16 @@ Remark.prototype.init=function (container) {
     });
 
     this.remarkEditor.change(function () {
-        _this.remark=$(this).val();
-        if(_this.remark===""){
+        _this.remark = $(this).val();
+        if (_this.remark === "") {
             _this.remarkLabel.text(_this.defaultRemark);
-        }else{
+        } else {
             _this.remarkLabel.html(_this.parseBreak(_this.remark));
         }
-        if(window.setDirty){
+        if (window.setDirty) {
             window.setDirty();
         }
-        if(window._setDirty){
+        if (window._setDirty) {
             window._setDirty();
         }
     });
@@ -59,22 +60,22 @@ Remark.prototype.init=function (container) {
     contentContainer.collapse('hide');
 };
 
-Remark.prototype.setData=function (data) {
-    if(!data || data===""){
+Remark.prototype.setData = function (data) {
+    if (!data || data === "") {
         return;
     }
-    this.remark=data;
+    this.remark = data;
     this.remarkEditor.val(data);
     this.remarkLabel.html(this.parseBreak(data));
 };
 
-Remark.prototype.toXml=function () {
-    return "<remark><![CDATA["+this.remark+"]]></remark>";
+Remark.prototype.toXml = function () {
+    return "<remark><![CDATA[" + this.remark + "]]></remark>";
 };
 
-Remark.prototype.parseBreak=function (data) {
-    data=data.replace(new RegExp("<",'gm'),'&lt;');
-    data=data.replace(new RegExp(">",'gm'),'&gt;');
-    data=data.replace(new RegExp("\n",'gm'),'</br>');
+Remark.prototype.parseBreak = function (data) {
+    data = data.replace(new RegExp("<", 'gm'), '&lt;');
+    data = data.replace(new RegExp(">", 'gm'), '&gt;');
+    data = data.replace(new RegExp("\n", 'gm'), '</br>');
     return data;
 };

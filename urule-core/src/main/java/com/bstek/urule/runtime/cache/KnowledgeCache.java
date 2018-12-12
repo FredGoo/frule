@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Bstek
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -22,8 +22,11 @@ import com.bstek.urule.runtime.KnowledgePackage;
  * @since 2015年1月28日
  */
 public interface KnowledgeCache {
-	public static final String BEAN_ID="urule.knowledgeCache";
-	KnowledgePackage getKnowledge(String packageId);
-	void putKnowledge(String packageId,KnowledgePackage knowledgePackage);
-	void removeKnowledge(String packageId);
+    String BEAN_ID = "urule.knowledgeCache";
+
+    KnowledgePackage getKnowledge(String packageId);
+
+    void putKnowledge(String packageId, KnowledgePackage knowledgePackage);
+
+    void removeKnowledge(String packageId);
 }

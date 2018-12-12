@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.dom4j.Element;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.action.Action;
 import com.bstek.urule.action.ScoringAction;
 import com.bstek.urule.builder.KnowledgeBase;

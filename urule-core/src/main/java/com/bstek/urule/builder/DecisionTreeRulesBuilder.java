@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.model.decisiontree.ActionTreeNode;
 import com.bstek.urule.model.decisiontree.ConditionTreeNode;
 import com.bstek.urule.model.decisiontree.DecisionTree;

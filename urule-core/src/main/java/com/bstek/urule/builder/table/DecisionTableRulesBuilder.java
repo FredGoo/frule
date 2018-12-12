@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.action.AbstractAction;
 import com.bstek.urule.action.Action;
 import com.bstek.urule.action.ConsolePrintAction;

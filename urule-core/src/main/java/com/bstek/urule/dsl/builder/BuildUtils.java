@@ -22,7 +22,7 @@ import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.Utils;
 import com.bstek.urule.dsl.RuleParserParser.ActionParametersContext;
 import com.bstek.urule.dsl.RuleParserParser.BeanMethodContext;

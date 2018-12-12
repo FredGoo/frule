@@ -17,7 +17,7 @@ package com.bstek.urule.model.function.impl;
 
 import java.util.Collection;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.model.function.Argument;
 import com.bstek.urule.model.function.FunctionDescriptor;
 import com.bstek.urule.runtime.WorkingMemory;

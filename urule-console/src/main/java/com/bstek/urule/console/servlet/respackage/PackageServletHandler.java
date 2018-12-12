@@ -65,7 +65,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.bstek.urule.Configure;
 import com.bstek.urule.KnowledgePackageReceiverServlet;
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.Utils;
 import com.bstek.urule.builder.KnowledgeBase;
 import com.bstek.urule.builder.KnowledgeBuilder;

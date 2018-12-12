@@ -25,7 +25,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.builder.RulesRebuilder;
 import com.bstek.urule.builder.resource.Resource;
 import com.bstek.urule.dsl.builder.ContextBuilder;

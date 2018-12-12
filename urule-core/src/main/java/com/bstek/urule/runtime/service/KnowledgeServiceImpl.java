@@ -24,7 +24,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.bstek.urule.RuleException;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.runtime.KnowledgePackage;
 import com.bstek.urule.runtime.cache.CacheUtils;
 
@@ -82,6 +82,7 @@ public class KnowledgeServiceImpl implements KnowledgeService, ApplicationContex
                 }
             }
         }
+
         return knowledgePackage;
     }
 
