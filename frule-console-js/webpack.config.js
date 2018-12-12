@@ -1,10 +1,13 @@
 /**
- * Created by Jacky.Gao on 2018-04-23.
+ * @author Jacky.Gao
+ * 2018-04-23
  * Base on Webpack4
  */
 const path = require('path');
+
 module.exports = {
     mode: 'development',
+
     entry: {
         frame: './src/frame/index.jsx',
         variableEditor: './src/variable/index.jsx',
@@ -22,10 +25,12 @@ module.exports = {
         scoreCardTable: './src/scorecard/index.jsx',
         permissionConfigEditor: './src/permission/index.jsx'
     },
+
     output: {
         path: path.resolve('../urule-console/src/main/resources/urule-asserts/js'),
         filename: '[name].bundle.js'
     },
+
     module: {
         rules: [
             {
@@ -37,12 +42,10 @@ module.exports = {
                         "react", "env"
                     ]
                 }
-            },
-            {
+            }, {
                 test: /\.css$/,
                 use: [{loader: 'style-loader'}, {loader: 'css-loader'}]
-            },
-            {
+            }, {
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
                 use: [
                     {
@@ -54,5 +57,21 @@ module.exports = {
                 ]
             }
         ]
+    },
+
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 9000,
+        proxy: {
+            '/geex-dolphin-provider/': {
+                target: 'http://127.0.0.1:8080',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^': ''
+                }
+            }
+        },
+
     }
 };

@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>1.7</java.version>
-        <tomcat.version>8.5.5</tomcat.version>
+        <tom1cat.version>8.5.5</tom1cat.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
