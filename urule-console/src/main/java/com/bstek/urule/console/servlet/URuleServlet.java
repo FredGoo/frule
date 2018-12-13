@@ -41,7 +41,7 @@ import com.bstek.urule.console.repository.NodeLockException;
 public class URuleServlet extends HttpServlet {
     private static final long serialVersionUID = -5067484267904906233L;
     private Map<String, ServletHandler> handlerMap = new HashMap<>();
-    public static final String URL = "/urule";
+    public static final String URL = "/frule/api";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -69,7 +69,7 @@ public class URuleServlet extends HttpServlet {
             String uri = req.getRequestURI();
             String targetUrl = uri.substring(path.length());
             if (targetUrl.length() < 1) {
-                resp.sendRedirect(req.getContextPath() + "/urule/frame");
+                resp.sendRedirect(req.getContextPath() + "/frule/api/frame");
                 return;
             }
             int slashPos = targetUrl.indexOf("/", 1);

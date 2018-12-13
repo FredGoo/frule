@@ -71,31 +71,4 @@
         </dependency>
     </dependencies>
 
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>Gaojie</name>
-            <email>jacky.gao@bstek.com</email>
-            <organization>Bstek</organization>
-            <organizationUrl>http://www.bstek.com</organizationUrl>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>https://github.com/youseries/urule.git</connection>
-        <developerConnection>https://github.com/youseries/urule.git</developerConnection>
-        <url>https://github.com/youseries/urule</url>
-    </scm>
-
-    <organization>
-        <name>Bstek</name>
-        <url>http://www.bstek.com</url>
-    </organization>
-
 </project>

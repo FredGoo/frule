@@ -41,7 +41,7 @@ public abstract class BaseServletHandler implements ServletHandler {
         }
     }
 
-    protected String retriveMethod(HttpServletRequest req) throws ServletException {
+    protected String retriveMethod(HttpServletRequest req) {
         String path = req.getContextPath() + URuleServlet.URL;
         String uri = req.getRequestURI();
         String targetUrl = uri.substring(path.length());
