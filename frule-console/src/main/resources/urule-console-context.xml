@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <import resource="classpath:urule-core-context.xml"/>
+
+    <bean id="urule.knowledgePackageService" class="com.bstek.urule.console.DefaultKnowledgePackageService">
+        <property name="knowledgeBuilder" ref="urule.knowledgeBuilder"/>
+        <property name="repositoryService" ref="urule.repositoryService"/>
+    </bean>
+
+    <bean id="urule.consoleServletHandler" class="com.bstek.urule.console.servlet.console.ConsoleServletHandler">
+        <property name="debugMessageHolder" ref="urule.debugMessageHolder"/>
+    </bean>
+
+    <bean id="urule.consoleDebugWriter" class="com.bstek.urule.console.servlet.console.ConsoleDebugWriter">
+        <property name="debugMessageHolder" ref="urule.debugMessageHolder"/>
+    </bean>
+
+    <bean id="urule.debugMessageHolder" class="com.bstek.urule.console.servlet.console.DebugMessageHolder"/>
+
+    <bean id="urule.httpSessionKnowledgeCache"
+          class="com.bstek.urule.console.servlet.respackage.HttpSessionKnowledgeCache"/>
+
+    <bean id="urule.repositoryResourceProvider" class="com.bstek.urule.console.repository.RepositoryResourceProvider">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+    </bean>
+    <bean id="urule.permissionConfigServletHandler"
+          class="com.bstek.urule.console.servlet.permission.PermissionConfigServletHandler">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+        <property name="permissionStore" ref="urule.permissionService"/>
+    </bean>
+
+    <bean id="urule.permissionService" class="com.bstek.urule.console.repository.permission.PermissionServiceImpl">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+    </bean>
+
+    <bean id="urule.scorecardEditorServletHandler"
+          class="com.bstek.urule.console.servlet.scorecard.ScorecardEditorServletHandler"/>
+
+    <bean id="urule.complexScorecardEditorServletHandler"
+          class="com.bstek.urule.console.servlet.complexscorecard.ComplexScorecardEditorServletHandler"/>
+
+    <bean id="urule.resourceLoaderServletHandler" class="com.bstek.urule.console.servlet.ResourceLoaderServletHandler"/>
+
+    <bean id="urule.loadKnowledgeServletHandler"
+          class="com.bstek.urule.console.servlet.knowledge.LoadKnowledgeServletHandler">
+        <property name="knowledgePackageService" ref="urule.knowledgePackageService"/>
+    </bean>
+
+    <bean id="urule.xmlServletHandler" class="com.bstek.urule.console.servlet.xml.XmlServletHandler">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+        <property name="builtInActionLibraryBuilder" ref="urule.builtInActionLibraryBuilder"/>
+    </bean>
+
+    <bean id="urule.frameServletHandler" class="com.bstek.urule.console.servlet.frame.FrameServletHandler">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+        <property name="welcomePage" value="${urule.welcomePage}"/>
+        <property name="title" value="${urule.console.title}"/>
+    </bean>
+    <bean id="urule.packageServletHandler" class="com.bstek.urule.console.servlet.respackage.PackageServletHandler">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+        <property name="knowledgeBuilder" ref="urule.knowledgeBuilder"/>
+        <property name="httpSessionKnowledgeCache" ref="urule.httpSessionKnowledgeCache"/>
+    </bean>
+
+    <bean id="urule.reteDiagramServletHandler"
+          class="com.bstek.urule.console.servlet.diagram.ReteDiagramServletHandler">
+        <property name="knowledgeBuilder" ref="urule.knowledgeBuilder"/>
+        <property name="httpSessionKnowledgeCache" ref="urule.httpSessionKnowledgeCache"/>
+    </bean>
+
+    <bean id="urule.ruleSetServletEditorHandler"
+          class="com.bstek.urule.console.servlet.ruleset.RuleSetServletEditorHandler"/>
+    <bean id="urule.decisionTreeEditorServletHandler"
+          class="com.bstek.urule.console.servlet.decisiontree.DecisionTreeEditorServletHandler"/>
+    <bean id="urule.variableEditorServletHandler"
+          class="com.bstek.urule.console.servlet.variable.VariableEditorServletHandler"/>
+    <bean id="urule.constantServletHandler" class="com.bstek.urule.console.servlet.constant.ConstantServletHandler"/>
+    <bean id="urule.parameterServletHandler" class="com.bstek.urule.console.servlet.parameter.ParameterServletHandler"/>
+    <bean id="urule.actionServletHandler" class="com.bstek.urule.console.servlet.action.ActionServletHandler"/>
+    <bean id="urule.ruleFlowDesignerServletHandler"
+          class="com.bstek.urule.console.servlet.flow.RuleFlowDesignerServletHandler">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+        <property name="flowDeserializer" ref="urule.flowDeserializer"/>
+    </bean>
+
+    <bean id="urule.ulEditorServletHandler" class="com.bstek.urule.console.servlet.ul.ULEditorServletHandler">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+        <property name="dslRuleSetBuilder" ref="urule.dslRuleSetBuilder"/>
+        <property name="resourceLibraryBuilder" ref="urule.resourceLibraryBuilder"/>
+    </bean>
+    <bean id="urule.decisiontableEditorServletHandler"
+          class="com.bstek.urule.console.servlet.decisiontable.DecisiontableEditorServletHandler"/>
+    <bean id="urule.scriptDecisiontableEditorServletHandler"
+          class="com.bstek.urule.console.servlet.scriptdecisiontable.ScriptDecisiontableEditorServletHandler"/>
+
+    <bean id="urule.commonServletHandler" class="com.bstek.urule.console.servlet.common.CommonServletHandler">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+        <property name="builtInActionLibraryBuilder" ref="urule.builtInActionLibraryBuilder"/>
+    </bean>
+    <bean id="urule.clientConfigServletHandler"
+          class="com.bstek.urule.console.servlet.client.ClientConfigServletHandler">
+        <property name="repositoryService" ref="urule.repositoryService"/>
+    </bean>
+
+    <bean id="urule.console.propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="location">
+            <value>classpath:urule-console-context.properties</value>
+        </property>
+    </bean>
+
+    <bean id="urule.repositoryBuilder" class="com.bstek.urule.console.repository.RepositoryBuilder"
+          destroy-method="destroy">
+        <property name="repositoryXml" value="${urule.repository.xml}"/>
+        <property name="repoHomeDir" value="${urule.repository.dir}"/>
+        <property name="repositoryDatasourceName" value="${urule.repository.datasourcename}"/>
+        <property name="databaseType" value="${urule.repository.databasetype}"/>
+    </bean>
+
+    <bean id="urule.repositoryService" class="com.bstek.urule.console.repository.RepositoryServiceImpl">
+        <property name="repositoryBuilder" ref="urule.repositoryBuilder"/>
+        <property name="permissionService" ref="urule.permissionService"/>
+    </bean>
+
+</beans>
