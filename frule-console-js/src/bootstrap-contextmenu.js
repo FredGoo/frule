@@ -10,7 +10,6 @@
  * ========================================================= */
 
 ;(function ($) {
-
     'use strict';
 
     /* CONTEXTMENU CLASS DEFINITION
