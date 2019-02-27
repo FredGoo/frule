@@ -8,7 +8,7 @@
         <version>3.0.0-SNAPSHOT</version>
     </parent>
 
-    <name>FRule Console Project</name>
+    <name>Frule Console Project</name>
     <artifactId>frule-console</artifactId>
     <version>3.0.0-SNAPSHOT</version>
 

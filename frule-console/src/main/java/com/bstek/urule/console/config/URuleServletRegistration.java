@@ -15,5 +15,4 @@ public class URuleServletRegistration {
     public ServletRegistrationBean registerURuleServlet() {
         return new ServletRegistrationBean(new URuleServlet(), "/frule/api/*");
     }
-
 }

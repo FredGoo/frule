@@ -29,7 +29,6 @@ import '../urule/ConfigVariableDialog.js';
 import '../urule/ActionType.js';
 import '../urule/PrintAction.js';
 import '../urule/AssignmentAction.js';
-import '../urule/ActionType.js';
 import '../urule/SimpleArithmetic.js';
 import '../urule/RuleProperty.js';
 import './Join.js';

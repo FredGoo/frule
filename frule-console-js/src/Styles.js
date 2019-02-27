@@ -1,6 +1,3 @@
-/**
- * Created by Jacky.gao on 2016/5/26.
- */
 const Styles = {};
 Styles.frameStyle = {
     getRootIcon: function () {
