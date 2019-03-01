@@ -1,6 +1,3 @@
-/**
- * Created by Jacky.gao on 2016/5/23.
- */
 import Styles from '../Styles.js';
 import * as event from './event.js';
 import * as componentEvent from '../components/componentEvent.js';
@@ -60,7 +57,7 @@ export function createNewFile(newFileName, fileType, parentNodeData) {
             }
         });
     }
-};
+}
 
 export function rename(path, newPath) {
     return function (dispatch) {
@@ -95,7 +92,7 @@ export function rename(path, newPath) {
             }
         });
     }
-};
+}
 
 export function createNewProject(newProjectName, parentNodeData) {
     return function (dispatch) {
@@ -123,7 +120,7 @@ export function createNewProject(newProjectName, parentNodeData) {
             }
         });
     };
-};
+}
 
 export function createNewFolder(newFolderName, parentNodeData) {
     const fullFolderName = parentNodeData.fullPath + '/' + newFolderName;
@@ -158,7 +155,7 @@ export function createNewFolder(newFolderName, parentNodeData) {
             }
         });
     };
-};
+}
 
 export function fileRename(itemData, newName) {
     return function (dispatch) {
@@ -205,7 +202,7 @@ export function fileRename(itemData, newName) {
             }
         });
     }
-};
+}
 
 function moveFile(path, newPath, dispatch) {
     var url = window._server + "/frame/fileRename";
@@ -237,15 +234,15 @@ function moveFile(path, newPath, dispatch) {
 
 export function add(data) {
     return {data, type: ADD};
-};
+}
 
 export function del(index) {
     return {index, type: DEL};
-};
+}
 
 export function update(index, data) {
     return {index, data, type: UPDATE};
-};
+}
 
 export function loadData(classify, projectName, types, searchFileName) {
     if (classify === null || classify === 'undefined') {
@@ -278,7 +275,7 @@ export function loadData(classify, projectName, types, searchFileName) {
             }
         });
     }
-};
+}
 
 export function buildType(fileType) {
     let pos = fileType.indexOf(':');
@@ -613,7 +610,7 @@ function buildData(data, level) {
             buildData(child, level);
         });
     }
-};
+}
 
 function buildLibContextMenu() {
     return [
@@ -938,7 +935,7 @@ function buildFileContextMenu() {
             }
         }
     ];
-};
+}
 
 export function lockFile(file, dispatch) {
     componentEvent.eventEmitter.emit(componentEvent.SHOW_LOADING);

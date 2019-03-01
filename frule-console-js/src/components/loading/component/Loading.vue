@@ -24,4 +24,9 @@
 </template>
 
 <script>
-    import '../css/loading.css';</script>
+    import '../css/loading.css';
+
+    export default {
+        name: 'Loading'
+    }
+</script>

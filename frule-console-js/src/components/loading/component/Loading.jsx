@@ -37,7 +37,5 @@ export default class Loading extends Component {
         const coverTop = (height / 2) - 20;
         const coverLeft = (width / 2) - 20;
         const loadStyle = {marginTop: coverTop, marginLeft: coverLeft, width: '40px', height: '40px'};
-        return (
-        );
     }
 }

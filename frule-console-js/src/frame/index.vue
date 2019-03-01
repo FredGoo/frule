@@ -1,10 +1,10 @@
 <template>
     <div>
-        <Loading show={true} />
-            <Provider store={store}>
-                <Splitter orientation='vertical' position='20%'>
-                    <div>
-                        <div style="border: 1px solid #ddd; height: 35px; background: #f5f5f5; padding: 5px 10px">
+        <Loading show="true"/>
+        <!--<Provider store="store">-->
+        <Splitter orientation='vertical' position='20%'>
+            <div>
+                <div style="border: 1px solid #ddd; height: 35px; background: #f5f5f5; padding: 5px 10px">
                             <span class="dropdown" style="margin: 5px">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="知识库内容展示方式">
                                 <i class="rf rf-display" style="font-size: 12pt"></i>
@@ -27,9 +27,9 @@
                             </ul>
                             </span>
 
-                            <span class="dropdown" style="margin: 5px">
+                    <span class="dropdown" style="margin: 5px">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="项目过滤">
-                                <i class="rf rf-list" style="fontSize: '12pt'"></i>
+                                <i class="rf rf-list" style="font-size: 12pt"></i>
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu" id="__project_filter_menu">
@@ -55,9 +55,9 @@
                             </ul>
                             </span>
 
-                            <span class="dropdown" style="margin: 5px">
+                    <span class="dropdown" style="margin: 5px">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="文件类型过滤">
-                                <i class="rf rf-type" style="fontSize: '12pt'"></i> <b class="caret"></b>
+                                <i class="rf rf-type" style="font-size: 12pt"></i> <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="#" onClick="
@@ -140,7 +140,7 @@
                             </ul>
                             </span>
 
-                            <span class="dropdown" style="margin: 5px">
+                    <span class="dropdown" style="margin: 5px">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="权限配置">
                                 <i class="rf rf-authority" style="font-size: 12pt"/>
                                 <b class="caret"/></a>
@@ -159,31 +159,96 @@
                                 </li>
                             </ul>
                             </span>
-                        </div>
-                        <div class='tree' style="margin-left: 10px">
-                            <div style="margin: 10px 0 5px 2px">
-                                <input type="text" class="form-control fileSearchText" placeholder="输入要查询的文件名..."
-                                       style="display: inline-block; width: 170px"/>
-                                <a href="#" onClick={searchFile} style="margin: 6px; font-size: 16px">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                </a>
-                            </div>
-                            <Tree draggable={true} />
-                        </div>
+                </div>
+                <div class='tree' style="margin-left: 10px">
+                    <div style="margin: 10px 0 5px 2px">
+                        <input type="text" class="form-control fileSearchText" placeholder="输入要查询的文件名..."
+                               style="display: inline-block; width: 170px"/>
+                        <a href="#" onClick={searchFile} style="margin: 6px; font-size: 16px">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </a>
                     </div>
-                    <div>
-                        <ComponentContainer/>
-                        <FrameTab welcomePage={window._welcomePage} />
-                    </div>
-                </Splitter>
-            </Provider>
+                    <Tree draggable="true"/>
+                </div>
+            </div>
+            <div>
+                <ComponentContainer/>
+                <FrameTab welcomePage="window._welcomePage"/>
+            </div>
+        </Splitter>
+        <!--</Provider>-->
     </div>
 </template>
 
 <script>
+    import '../css/iconfont.css';
+    import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+    import '../../node_modules/codemirror/lib/codemirror.css';
+    import '../../node_modules/bootstrapvalidator/dist/css/bootstrapValidator.css';
+    import '../bootstrap-contextmenu.js';
+
+    import Vuex from 'vuex';
     import Loading from '../components/loading/component/Loading.vue';
+    import Splitter from '../components/splitter/component/Splitter.vue';
+    import reducer from './reducer.js';
+    import * as ACTIONS from './action.js';
+    import * as componentEvent from '../components/componentEvent.js';
+    import * as event from './event.js';
 
     export default {
+        mounted: function () {
+            window._types = null;
+            window._projectName = null;
+            window.componentEvent = componentEvent;
+
+            event.eventEmitter.on(event.PROJECT_LIST_CHANGE, projectNames => {
+                const menu = $('#__project_filter_menu');
+                const menuChildren = menu.children('li');
+                menuChildren.each(function (index, li) {
+                    const $li = $(li);
+                    if (!$li.hasClass('_firstItem')) {
+                        $li.remove();
+                    } else {
+                        $li.find('a').css("margin-left", '0px');
+                    }
+                });
+                $('#_show_all_projects_i').addClass('rf rf-check');
+                for (let name of projectNames) {
+                    const newLi = $(`<li class="p_${name}"></li>`),
+                        link = $(`<a href="#" style="margin-left: 22px"><i></i> ${name}</a>`);
+                    newLi.append(link);
+                    menu.append(newLi);
+
+                    link.click(function () {
+                        window._projectName = name;
+                        componentEvent.eventEmitter.emit(componentEvent.SHOW_LOADING);
+                        setTimeout(function () {
+                            store.dispatch(ACTIONS.loadData(window._classify, window._projectName, window._types, window.searchFileName));
+                            event.eventEmitter.emit(event.PROJECT_FILTER_CHANGE, name);
+                            componentEvent.eventEmitter.emit(componentEvent.HIDE_LOADING);
+                        }, 200);
+                    });
+                }
+            });
+            event.eventEmitter.on(event.PROJECT_FILTER_CHANGE, name => {
+                const menu = $('#__project_filter_menu');
+                const menuChildren = menu.children('li');
+                menuChildren.each(function (index, li) {
+                    $(li).find('i').removeClass('rf rf-check');
+                    $(li).find('a').css('margin-left', '22px');
+                });
+                const li = menu.find(`.p_${name}`);
+                li.find('a').css('margin-left', '0px');
+                li.find('i').addClass('rf rf-check');
+            });
+            event.eventEmitter.on(event.EXPAND_TREE_NODE, (nodeData) => {
+                const $span = $('#node-' + nodeData.id).parent("li");
+                let $liChildren = $span.parent('li.parent_li').find(' > ul > li');
+                $liChildren.show('fast');
+                $span.children('i:first').addClass('rf-minus').removeClass('rf-plus');
+            });
+
+        },
         components: {
             Loading
         }
