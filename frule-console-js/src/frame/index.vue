@@ -1,8 +1,7 @@
 <template>
     <div>
         <Loading show="true"/>
-        <!--<Provider store="store">-->
-        <Splitter orientation='vertical' position='20%'>
+        <Splitter fr-orientation='vertical' fr-position='20%'>
             <div>
                 <div style="border: 1px solid #ddd; height: 35px; background: #f5f5f5; padding: 5px 10px">
                             <span class="dropdown" style="margin: 5px">
@@ -176,7 +175,6 @@
                 <FrameTab welcomePage="window._welcomePage"/>
             </div>
         </Splitter>
-        <!--</Provider>-->
     </div>
 </template>
 
@@ -185,21 +183,26 @@
     import '../../node_modules/bootstrap/dist/css/bootstrap.css';
     import '../../node_modules/codemirror/lib/codemirror.css';
     import '../../node_modules/bootstrapvalidator/dist/css/bootstrapValidator.css';
-    import '../bootstrap-contextmenu.js';
 
-    import Vuex from 'vuex';
-    import Loading from '../components/loading/component/Loading.vue';
-    import Splitter from '../components/splitter/component/Splitter.vue';
-    import reducer from './reducer.js';
+    import '../bootstrap-contextmenu.js';
     import * as ACTIONS from './action.js';
     import * as componentEvent from '../components/componentEvent.js';
     import * as event from './event.js';
+    import Loading from '../components/loading/component/Loading.vue';
+    import Splitter from '../components/splitter/component/Splitter.vue';
+    import Tree from '../components/tree/component/Tree.vue';
 
     export default {
         mounted: function () {
             window._types = null;
             window._projectName = null;
             window.componentEvent = componentEvent;
+            // const documentHeight = $(document).height() + 'px';
+
+            // 加载菜单
+            this.$store.dispatch('loadData').catch(() => {
+                console.log('load data error');
+            });
 
             event.eventEmitter.on(event.PROJECT_LIST_CHANGE, projectNames => {
                 const menu = $('#__project_filter_menu');
@@ -247,10 +250,21 @@
                 $liChildren.show('fast');
                 $span.children('i:first').addClass('rf-minus').removeClass('rf-plus');
             });
-
+            event.eventEmitter.on(event.CHANGE_CLASSIFY, classify => {
+                window._classify = classify;
+                if (classify) {
+                    $('#__classify_display').html('<i class="rf rf-check"></i> 分类展示');
+                    $('#__no_classify_display').html('&nbsp;&nbsp;&nbsp;&nbsp;集中展示');
+                } else {
+                    $('#__classify_display').html('&nbsp;&nbsp;&nbsp;&nbsp;分类展示');
+                    $('#__no_classify_display').html('<i class="rf rf-check"></i> 集中展示');
+                }
+            });
         },
         components: {
-            Loading
+            Loading,
+            Splitter,
+            Tree
         }
     }
 </script>

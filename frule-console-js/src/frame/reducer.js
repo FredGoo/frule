@@ -21,9 +21,9 @@ function tree(state = {}, action) {
             var data = [...state.data];
             data[action.index].name = action.itemData.name;
             return Object.assign({}, state, {data});
-        case ACTIONS.LOAD_END:
-            var data = action.data;
-            return Object.assign({}, state, {data});
+        // case ACTIONS.LOAD_END:
+        //     var data = action.data;
+        //     return Object.assign({}, state, {data});
         case ACTIONS.FILE_RENAME:
             var newData = Object.assign({}, state.data);
             var dataMap = new Map();
