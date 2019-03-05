@@ -7,12 +7,18 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
     mode: 'development',
 
+    resolve: {
+        extensions: ['*', '.js', '.vue', '.json']
+    },
+
     entry: {
-        frame: './src/frame/index.jsx',
+        frame: './src/main.js'
+        // frame: './src/frame/index.jsx',
         // variableEditor: './src/variable/index.jsx',
         // constantEditor: './src/constant/index.jsx',
         // parameterEditor: './src/parameter/index.jsx',
@@ -35,6 +41,7 @@ module.exports = {
     },
 
     plugins: [
+        new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             template: 'src/frame.html'
         }),
@@ -48,6 +55,10 @@ module.exports = {
             {
                 from: path.resolve(__dirname, 'html'),
                 to: 'html'
+            },
+            {
+                from: path.resolve(__dirname, 'fonts'),
+                to: 'fonts'
             }
         ])
     ],
@@ -55,6 +66,9 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.vue$/,
+                use: ['vue-loader']
+            }, {
                 test: /\.(jsx|js)?$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",

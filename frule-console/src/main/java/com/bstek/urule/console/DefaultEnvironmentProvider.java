@@ -15,10 +15,10 @@
  ******************************************************************************/
 package com.bstek.urule.console;
 
+import com.bstek.urule.console.servlet.RequestContext;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.bstek.urule.console.servlet.RequestContext;
 
 /**
  * @author Jacky.gao

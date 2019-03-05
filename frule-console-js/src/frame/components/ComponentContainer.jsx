@@ -28,5 +28,6 @@ class ComponentContainer extends Component {
             </div>
         );
     }
-};
+}
+
 export default connect()(ComponentContainer);

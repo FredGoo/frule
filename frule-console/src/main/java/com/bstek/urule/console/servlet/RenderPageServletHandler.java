@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.urule.console.servlet;
 
+import com.bstek.urule.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
@@ -23,8 +24,6 @@ import org.apache.velocity.runtime.log.NullLogChute;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-
-import com.bstek.urule.Utils;
 
 
 /**
@@ -40,7 +39,7 @@ public abstract class RenderPageServletHandler extends WriteJsonServletHandler i
         if (StringUtils.isNotBlank(file)) {
             file = Utils.decodeURL(file);
             if (file.startsWith("/")) {
-                file = file.substring(1, file.length());
+                file = file.substring(1);
                 int pos = file.indexOf("/");
                 project = file.substring(0, pos);
             }

@@ -10,7 +10,7 @@
         <relativePath/>
     </parent>
 
-    <name>FRule Springboot Project</name>
+    <name>Frule Spring Boot Project</name>
     <groupId>gyqw</groupId>
     <artifactId>frule-spring-boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>

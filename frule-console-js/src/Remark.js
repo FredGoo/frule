@@ -7,6 +7,7 @@ window.Remark = function (container) {
     this.defaultRemark = "请输入备注内容";
     this.init(container);
 };
+
 Remark.prototype.init = function (container) {
     var toolbar = $("<div style='cursor:pointer;color:#777;font-size:12px'>备注</div>");
     container.append(toolbar);
