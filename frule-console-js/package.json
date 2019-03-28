@@ -27,10 +27,7 @@
     "react-splitter": "^0.2.0",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0",
-    "vue": "^2.6.7",
-    "vue-router": "^3.0.2",
-    "vuex": "^3.1.0"
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -47,8 +44,6 @@
     "style-loader": "^0.13.1",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^0.5.7",
-    "vue-loader": "^15.6.4",
-    "vue-template-compiler": "^2.6.7",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10"
