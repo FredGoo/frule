@@ -21,7 +21,7 @@ export default class MenuItem extends Component{
         const item=this.props.item;
         return (
             <li>
-                <a href='###'><i className={item.icon} style={{color:'#00A0E8'}}></i> {item.name}</a>
+                <a href='###'><i className={item.icon} style={{color:'#00A0E8'}}/> {item.name}</a>
             </li>
         );
     }

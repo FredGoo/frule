@@ -15,18 +15,18 @@
  ******************************************************************************/
 package com.bstek.urule.console;
 
-import java.io.IOException;
-import java.util.List;
-
-import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.builder.KnowledgeBase;
 import com.bstek.urule.builder.KnowledgeBuilder;
 import com.bstek.urule.builder.ResourceBase;
 import com.bstek.urule.console.repository.RepositoryService;
 import com.bstek.urule.console.repository.model.ResourceItem;
 import com.bstek.urule.console.repository.model.ResourcePackage;
+import com.bstek.urule.exception.RuleException;
 import com.bstek.urule.runtime.KnowledgePackage;
 import com.bstek.urule.runtime.service.KnowledgePackageService;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Jacky.gao
